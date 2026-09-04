@@ -107,78 +107,59 @@
     const CAT_LABELS = { general: 'General', concierto: 'Conciertos', integradores: 'Integrantes', eventos: 'Eventos', promo: 'Promocional' };
     const SONG_CATS = { paraguayas: 'Polkas y Guaranías', latinas: 'Cumbias y Salsa', merengues: 'Merengues', romanticas: 'Baladas', boleros: 'Boleros', mexicanas: 'Mexicanos y Corridos', internacional: 'Rock y Pop', brasileñas: 'Sertanejo y Música Brasileña' };
 
-    // ===== ESTADO =====
+    // ===== ESTADO (base: defaults.js, unica fuente de verdad) =====
+    function cloneObj(o) { try { return JSON.parse(JSON.stringify(o)); } catch (e) { return o; } }
     const state = {
         authed: false,
         firebaseWritable: firebaseReady,
-        site: {
-            band_name: 'Onda Joven',
-            about: 'Onda Joven se fundó el 21 de septiembre de 1994 bajo la dirección de los Hermanos Noguera. Desde entonces, más de tres décadas poniendo a bailar los eventos de nuestro Paraguay.',
-            history: 'El grupo nació en 1994 con Los Hermanos Noguera.',
-            hero: { subtitle: 'Grupo Musical desde 1994', desc: 'Música en vivo para tus eventos.' },
-            location: 'Curuguaty, Paraguay', map_query: '-24.4633671, -55.6907254',
-            phone: '0971 820 528', whatsapp: '0971 820 528', email: '',
-            social: {}, services: [
-                { name: 'Casamientos', desc: 'La música perfecta para tu boda y recepción.', icon: 'fa-ring' },
-                { name: 'Bodas de Oro', desc: 'Celebración inolvidable para aniversarios.', icon: 'fa-heart' },
-                { name: 'Quinceañeras', desc: 'Ambienta el día más especial de tu 15 años.', icon: 'fa-crown' },
-                { name: 'Fiestas Patronales', desc: 'Vivamos juntos las fiestas de tu comunidad.', icon: 'fa-church' },
-                { name: 'Fiestas Privadas', desc: 'Cumpleaños y reuniones familiares con música en vivo.', icon: 'fa-glass-cheers' },
-                { name: 'Festivales', desc: 'Espectáculo completo para escenarios y festivales.', icon: 'fa-star' },
-                { name: 'Fiestas de Colación', desc: 'Cierra con broche de oro tu colación y graduación.', icon: 'fa-graduation-cap' },
-                { name: 'Eventos Empresariales', desc: 'Amenización profesional para tu empresa.', icon: 'fa-briefcase' }
-            ],
-            repertoire: {
-                paraguayas: [], latinas: [], merengues: [], romanticas: [],
-                boleros: [], mexicanas: [], internacional: [],
-                brasileñas: [
-                    { name: 'Evidências', artist: 'Chitãozinho & Xororó', duration: '4:30' },
-                    { name: 'Foi Deus', artist: 'Chitãozinho & Xororó', duration: '3:50' },
-                    { name: 'No Rancho Fundo', artist: 'Chitãozinho & Xororó', duration: '4:15' },
-                    { name: 'Boate Azul', artist: 'Bruno & Marrone', duration: '3:30' },
-                    { name: 'Chora Me Liga', artist: 'Bruno & Marrone', duration: '3:45' },
-                    { name: 'Amore', artist: 'Bruno & Marrone', duration: '3:40' },
-                    { name: 'Meu Coração', artist: 'Leonardo', duration: '3:55' },
-                    { name: 'Diz Pra Mim', artist: 'Jorge & Mateus', duration: '3:20' },
-                    { name: 'Aquarela do Brasil', artist: 'Música Brasileña', duration: '3:50' },
-                    { name: 'Garota de Ipanema', artist: 'Tom Jobim', duration: '3:35' }
-                ]
-            },
-            stats: []
-        },
-        photos: []
+        site: cloneObj(window.OJ_DEFAULTS.site),
+        photos: (window.OJ_DEFAULTS.photos || []).map(p => Object.assign({}, p, { id: p.id || p.url }))
     };
+
+    // ===== FUSION SEGURA (un parcial vacio no borra el contenido completo) =====
+    function mergeSite(base, over, protectEmpty) {
+        if (!over || typeof over !== 'object') return base;
+        const out = Object.assign({}, base, over || {});
+        out.hero = Object.assign({}, base.hero || {}, over.hero || {});
+        out.social = Object.assign({}, base.social || {}, over.social || {});
+        if (over.repertoire && typeof over.repertoire === 'object') {
+            const cats = {};
+            Object.keys(Object.assign({}, base.repertoire || {}, over.repertoire)).forEach(function (c) {
+                const arr = over.repertoire[c];
+                if (Array.isArray(arr) && (!protectEmpty || arr.length > 0)) { cats[c] = arr.slice(); }
+                else if (base.repertoire && base.repertoire[c]) { cats[c] = base.repertoire[c].slice(); }
+                else { cats[c] = []; }
+            });
+            out.repertoire = cats;
+        }
+        if (Array.isArray(over.services) && (!protectEmpty || over.services.length > 0)) out.services = over.services.slice();
+        if (Array.isArray(over.stats) && (!protectEmpty || over.stats.length > 0)) out.stats = over.stats.slice();
+        return out;
+    }
 
     // ===== CARGAR DATOS =====
     async function loadData() {
         // En modo GitHub: leemos primero lo publicado (data.json) y luego
-        // se pisa con la ultima edicion local de este navegador.
+        // se pisa con la ultima edicion local de este navegador (sin borrar
+        // contenido con listas vacias).
         if (!firebaseReady && ghEnabled()) {
             try {
                 const r = await fetch('data.json?v=' + Date.now(), { cache: 'no-store' });
                 if (r.ok) {
                     const d = await r.json();
                     const cloud = (d && d.site) ? d.site : {};
-                    state.site = Object.assign({}, state.site, cloud);
-                    state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (cloud.hero || {}));
+                    state.site = mergeSite(state.site, cloud, false);
                     if (d && Array.isArray(d.photos)) {
                         state.photos = d.photos.map(p => Object.assign({}, p, { id: p.id || p.url }));
                     }
                 }
             } catch (e) { }
         }
-        // Backup local (ultima edicion de este dispositivo)
-        try {
-            const raw = localStorage.getItem('onaSiteBackup');
-            if (raw) {
-                const b = JSON.parse(raw);
-                state.site = Object.assign({}, state.site, b);
-                state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (b.hero || {}));
-                if (b.photos && b.photos.length) state.photos = b.photos.map(p => Object.assign({}, p, { id: p.id || p.url }));
-            }
-        } catch (e) {}
+        // NOTA: el respaldo local ya no se autoaplica. El contenido es lo
+        // PUBLICADO (data.json) o los defaults completos; asi un respaldo
+        // viejo/podado no puede volver a borrar servicios o repertorio.
         if (firebaseReady) {
-            try { const doc = await CONFIG_DOC.get(); if (doc.exists) { const d = doc.data() || {}; state.site = Object.assign({}, state.site, d); state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (d.hero || {})); } } catch (e) { console.error('Error cargando config:', e); }
+            try { const doc = await CONFIG_DOC.get(); if (doc.exists) { const d = doc.data() || {}; state.site = mergeSite(state.site, d, false); } } catch (e) { console.error('Error cargando config:', e); }
             try { const snap = await db.collection('photos').orderBy('order', 'asc').get(); const list = []; snap.forEach(p => list.push(Object.assign({ id: p.id }, p.data()))); state.photos = list; } catch (e) { console.error('Error cargando fotos:', e); }
         }
         populate();

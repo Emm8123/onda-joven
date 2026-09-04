@@ -38,115 +38,11 @@
         if (p) p.classList.add('hidden');
     }
 
-    // ===== ESTADO GLOBAL (expuesto para el panel de admin) =====
+    // ===== ESTADO GLOBAL (base: defaults.js, unica fuente de verdad) =====
+    function cloneObj(o) { try { return JSON.parse(JSON.stringify(o)); } catch (e) { return o; } }
     const state = {
-        site: {
-            band_name: 'Onda Joven',
-            about: 'Onda Joven se fundó el 21 de septiembre de 1994 bajo la dirección de los Hermanos Noguera. Desde entonces, más de tres décadas poniendo a bailar los eventos de nuestro Paraguay: sonido propio, luces, pantalla LED y boleta legal.',
-            history: 'El grupo nació en 1994 con Los Hermanos Noguera: Carlino Noguera en guitarra y voz, Virino Noguera en percusión y Alfirio Noguera en teclados, quien además asumió la dirección musical. En el bajo acompañó por décadas el Prof. Venancio Godoy hasta el 2025, año en que se integró Cristian Armin Noguera para continuar la tradición familiar.',
-            hero: { subtitle: 'Grupo Musical desde 1994', desc: 'Música en vivo para tus eventos: sonido propio, luces y pantalla LED. Boleta legal.' },
-            location: 'Curuguaty, Paraguay',
-            map_query: '-24.4633671, -55.6907254',
-            phone: '0971 820 528',
-            whatsapp: '0971 820 528',
-            email: '',
-            social: {},
-            services: [
-                { name: 'Casamientos', desc: 'La música perfecta para tu boda y recepción.', icon: 'fa-ring' },
-                { name: 'Bodas de Oro', desc: 'Celebración inolvidable para aniversarios.', icon: 'fa-heart' },
-                { name: 'Quinceañeras', desc: 'Ambienta el día más especial de tu 15 años.', icon: 'fa-crown' },
-                { name: 'Fiestas Patronales', desc: 'Vivamos juntos las fiestas de tu comunidad.', icon: 'fa-church' },
-                { name: 'Fiestas Privadas', desc: 'Cumpleaños y reuniones familiares con música en vivo.', icon: 'fa-glass-cheers' },
-                { name: 'Festivales', desc: 'Espectáculo completo para escenarios y festivales.', icon: 'fa-star' },
-                { name: 'Fiestas de Colación', desc: 'Cierra con broche de oro tu colación y graduación.', icon: 'fa-graduation-cap' },
-                { name: 'Eventos Empresariales', desc: 'Amenización profesional para tu empresa.', icon: 'fa-briefcase' }
-            ],
-            repertoire: {
-                paraguayas: [
-                    { name: 'Pájaro Chogüí', artist: 'Popular Paraguaya', duration: '3:20' },
-                    { name: 'Mis Noches Sin Ti', artist: 'Dúo Quiñonez–Molina', duration: '4:10' },
-                    { name: 'Che Payé', artist: 'Herminio Giménez', duration: '3:45' },
-                    { name: 'Nde Resa Kuéra', artist: 'Juan Carlos Oviedo', duration: '3:55' },
-                    { name: 'Kurusu Pepo', artist: 'Félix Pérez Cardozo', duration: '3:15' },
-                    { name: 'Panambi Vera', artist: 'Mauricio Cardozo Ocampo', duration: '4:00' },
-                    { name: 'Regalo de Amor', artist: 'Grupo Generación', duration: '3:35' },
-                    { name: '18 de Julio', artist: 'Popular Paraguaya', duration: '2:50' }
-                ],
-                latinas: [
-                    { name: 'La Cumbia de la Cerveza', artist: 'Grupo Sonador', duration: '3:40' },
-                    { name: 'La Colegiala', artist: 'Rodolfo Aicardi', duration: '3:20' },
-                    { name: 'El Baile del Perrito', artist: 'Wilfrido Vargas', duration: '3:10' },
-                    { name: 'La Chona', artist: 'Los Tucanes de Tijuana', duration: '3:30' },
-                    { name: 'Ojitos Hechiceros', artist: 'Intocable', duration: '3:50' },
-                    { name: 'Cumbia Sampuesana', artist: 'Alfredo Gutiérrez', duration: '3:05' }
-                ],
-                merengues: [
-                    { name: 'Suavemente', artist: 'Elvis Crespo', duration: '4:10' },
-                    { name: 'La Dueña del Swing', artist: 'Los Hermanos Rosario', duration: '3:55' },
-                    { name: 'El Venao', artist: 'Rumaliz Perera', duration: '4:00' },
-                    { name: 'Yo Quiero Andar', artist: 'Sergio Vargas', duration: '3:45' },
-                    { name: 'La Razón', artist: 'Banda Real', duration: '3:35' }
-                ],
-                romanticas: [
-                    { name: 'El Triste', artist: 'José José', duration: '4:10' },
-                    { name: 'Si No Te Hubieras Ido', artist: 'Marco Antonio Solís', duration: '4:00' },
-                    { name: 'Como Fui a Enamorarme de Ti', artist: 'Los Bukis', duration: '3:45' },
-                    { name: 'Hasta Que Te Conocí', artist: 'Juan Gabriel', duration: '4:30' },
-                    { name: 'Te Amo', artist: 'Franco De Vita', duration: '4:05' }
-                ],
-                boleros: [
-                    { name: 'Y Hubo Alguien', artist: 'Marc Anthony', duration: '4:20' },
-                    { name: 'Dos Gardenias', artist: 'Buena Vista Social Club', duration: '3:05' },
-                    { name: 'Bésame Mucho', artist: 'Bolero Tradicional', duration: '3:45' },
-                    { name: 'Contigo Aprendí', artist: 'Armando Manzanero', duration: '3:50' },
-                    { name: 'Somos Novios', artist: 'Armando Manzanero', duration: '4:00' }
-                ],
-                mexicanas: [
-                    { name: 'El Rey', artist: 'José Alfredo Jiménez', duration: '3:15' },
-                    { name: 'El Son de la Negra', artist: 'Mariachi Vargas', duration: '3:00' },
-                    { name: 'La Bamba', artist: 'Ritchie Valens', duration: '2:40' },
-                    { name: 'Cielito Lindo', artist: 'Popular Mexicana', duration: '3:20' },
-                    { name: 'El Payaso', artist: 'Los Alegres de Terán', duration: '3:05' }
-                ],
-                internacional: [
-                    { name: 'Procura', artist: 'Chichi Peralta', duration: '4:10' },
-                    { name: 'La Bilirrubina', artist: 'Juan Luis Guerra', duration: '4:00' },
-                    { name: 'Tu Sonrisa', artist: 'Elvis Crespo', duration: '3:45' },
-                    { name: 'Mojito', artist: 'Tito El Bambino', duration: '3:30' },
-                    { name: 'Dura', artist: 'Daddy Yankee', duration: '3:20' }
-                ],
-                brasileñas: [
-                    { name: 'Evidências', artist: 'Chitãozinho & Xororó', duration: '4:30' },
-                    { name: 'Foi Deus', artist: 'Chitãozinho & Xororó', duration: '3:50' },
-                    { name: 'No Rancho Fundo', artist: 'Chitãozinho & Xororó', duration: '4:15' },
-                    { name: 'Boate Azul', artist: 'Bruno & Marrone', duration: '3:30' },
-                    { name: 'Chora Me Liga', artist: 'Bruno & Marrone', duration: '3:45' },
-                    { name: 'Amore', artist: 'Bruno & Marrone', duration: '3:40' },
-                    { name: 'Meu Coração', artist: 'Leonardo', duration: '3:55' },
-                    { name: 'Diz Pra Mim', artist: 'Jorge & Mateus', duration: '3:20' },
-                    { name: 'Aquarela do Brasil', artist: 'Música Brasileña', duration: '3:50' },
-                    { name: 'Garota de Ipanema', artist: 'Tom Jobim', duration: '3:35' }
-                ]
-            },
-            stats: [
-                { label: 'Años de Música', value: '32' },
-                { label: 'Fundada en', value: '1994' },
-                { label: 'Integrantes', value: '5' }
-            ]
-        },
-        photos: [
-            { url: 'fotos/Integrantes.jpeg', thumb: 'fotos/thumbs/Integrantes.jpeg', title: 'Integrantes de Onda Joven', category: 'integradores' },
-            { url: 'fotos/Integrantes..jpeg', thumb: 'fotos/thumbs/Integrantes..jpeg', title: 'Integrantes', category: 'integradores' },
-            { url: 'fotos/Integrantes...jpeg', thumb: 'fotos/thumbs/Integrantes...jpeg', title: 'Integrantes', category: 'integradores' },
-            { url: 'fotos/Integrantes....jpeg', thumb: 'fotos/thumbs/Integrantes....jpeg', title: 'Integrantes', category: 'integradores' },
-            { url: 'fotos/Casamientos.jpeg', thumb: 'fotos/thumbs/Casamientos.jpeg', title: 'Casamientos', category: 'eventos' },
-            { url: 'fotos/Festivales.jpeg', thumb: 'fotos/thumbs/Festivales.jpeg', title: 'Festivales', category: 'eventos' },
-            { url: 'fotos/Fiesta de colaci%C3%B3n.jpeg', thumb: 'fotos/thumbs/Fiesta de colaci%C3%B3n.jpeg', title: 'Fiesta de Colación', category: 'eventos' },
-            { url: 'fotos/Fiesta de colaci%C3%B3n..jpeg', thumb: 'fotos/thumbs/Fiesta de colaci%C3%B3n..jpeg', title: 'Fiesta de Colación', category: 'eventos' },
-            { url: 'fotos/Fiestas%20patronales.jpeg', thumb: 'fotos/thumbs/Fiestas%20patronales.jpeg', title: 'Fiestas Patronales', category: 'eventos' },
-            { url: 'fotos/Fiestas%20privadas.jpeg', thumb: 'fotos/thumbs/Fiestas%20privadas.jpeg', title: 'Fiestas Privadas', category: 'eventos' },
-            { url: 'fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg', thumb: 'fotos/thumbs/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg', title: 'Fiestas Privadas y Cumpleaños', category: 'eventos' }
-        ],
+        site: cloneObj(window.OJ_DEFAULTS.site),
+        photos: (window.OJ_DEFAULTS.photos || []).map(p => Object.assign({}, p)),
         filteredPhotos: [],
         authed: false,
         firebaseWritable: true,
@@ -192,36 +88,47 @@
     function thumbUrl(p) { return (p && p.thumb) ? p.thumb : (p ? p.url : ''); }
 
     // ===== CARGAR DATOS =====
-    function loadBackup() {
-        try { const raw = localStorage.getItem('onaSiteBackup'); return raw ? JSON.parse(raw) : null; }
-        catch (e) { return null; }
+    
+    // FUSION SEGURA: un dato publicado/respaldo que este PARTIALMENTE vacio
+    // (categoria sin canciones, sin servicios) NO puede borrar el contenido
+    // completo. protectEmpty=true: las listas vacias se ignoran.
+    function mergeSite(base, over, protectEmpty) {
+        if (!over || typeof over !== 'object') return base;
+        const out = Object.assign({}, base, over || {});
+        out.hero = Object.assign({}, base.hero || {}, over.hero || {});
+        out.social = Object.assign({}, base.social || {}, over.social || {});
+        if (over.repertoire && typeof over.repertoire === 'object') {
+            const cats = {};
+            Object.keys(Object.assign({}, base.repertoire || {}, over.repertoire)).forEach(function (c) {
+                const arr = over.repertoire[c];
+                if (Array.isArray(arr) && (!protectEmpty || arr.length > 0)) { cats[c] = arr.slice(); }
+                else if (base.repertoire && base.repertoire[c]) { cats[c] = base.repertoire[c].slice(); }
+                else { cats[c] = []; }
+            });
+            out.repertoire = cats;
+        }
+        if (Array.isArray(over.services) && (!protectEmpty || over.services.length > 0)) out.services = over.services.slice();
+        if (Array.isArray(over.stats) && (!protectEmpty || over.stats.length > 0)) out.stats = over.stats.slice();
+        return out;
     }
     async function loadData() {
-        // Cuando Firebase NO esta configurado, la pagina lee lo publicado:
-        // 1) data.json del sitio (lo que el admin publica via GitHub)
-        // 2) respaldo local del navegador (ultima edicion de este dispositivo)
+        // Con Firebase SIN configurar, la pagina muestra lo PUBLICADO en
+        // data.json (autoritativo). Si no existe aun, usa los defaults
+        // completos. El respaldo local ya NO se autoaplica: un respaldo
+        // viejo/podado no puede volver a borrar el contenido.
         if (!firebaseReady) {
             try {
                 const r = await fetch('data.json?v=' + Date.now(), { cache: 'no-store' });
                 if (r.ok) {
                     const d = await r.json();
-                    const cloud = (d && d.site) ? d.site : (d || {});
-                    state.site = Object.assign({}, state.site, cloud);
-                    state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (cloud.hero || {}));
-                    if (d && Array.isArray(d.photos) && d.photos.length) {
-                        state.photos = d.photos;
+                    const c = (d && d.site) ? d.site : (d || {});
+                    state.site = mergeSite(state.site, c, false);
+                    if (d && Array.isArray(d.photos)) {
+                        state.photos = d.photos.map(p => Object.assign({}, p, { id: p.id || p.url }));
                     }
                 }
             } catch (e) {
                 console.warn('No se pudo leer data.json:', e);
-            }
-            const backup = loadBackup();
-            if (backup) {
-                state.site = Object.assign({}, state.site, backup);
-                state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (backup.hero || {}));
-                if (backup.photos && backup.photos.length) {
-                    state.photos = backup.photos;
-                }
             }
             state.filteredPhotos = state.photos.slice();
         }
@@ -230,8 +137,7 @@
                 const doc = await CONFIG_DOC.get();
                 if (doc.exists) {
                     const data = doc.data() || {};
-                    state.site = Object.assign({}, state.site, data);
-                    state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (data.hero || {}));
+                    state.site = mergeSite(state.site, data, false);
                 }
             } catch (e) {
                 console.error('Error cargando config:', e);
@@ -297,7 +203,7 @@
         const ht = $('historyText');
         if (ht) ht.textContent = state.site.history || '';
         const stats = (state.site.stats && state.site.stats.length) ? state.site.stats
-            : [{ label: 'Años de Música', value: '32' }, { label: 'Desde el Año', value: '1994' }, { label: 'Integrantes', value: '5' }];
+            : [{ label: 'Años de Música', value: '32' }, { label: 'Desde el Año', value: '1994' }, { label: 'Integrantes', value: '4' }];
         const box = $('aboutStats');
         if (box) box.innerHTML = stats.map(s => '<div class="stat"><div class="stat-number">' + esc(s.value) + '</div><div class="stat-label">' + esc(s.label) + '</div></div>').join('');
     }
