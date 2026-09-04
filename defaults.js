@@ -7,8 +7,7 @@
 window.OJ_DEFAULTS = {
     site: {
         band_name: 'Onda Joven',
-        about: 'Onda Joven se fundó el 21 de septiembre de 1994 en Curuguaty, Paraguay, bajo la dirección de los Hermanos Noguera. Desde entonces, con más de tres décadas de trayectoria, sigue poniendo a bailar los eventos de todo el Paraguay: sonido propio, luces, pantalla LED y boleta legal.',
-        history: 'El grupo musical Onda Joven nació el 21 de septiembre de 1994 en Curuguaty, Paraguay, fundado por los Hermanos Noguera. Desde sus inicios, la música corría por las venas de la familia: Carlino Noguera en guitarra y voz, Virino Noguera en percusión y Alfirio Noguera en los teclados, quien además asumió la dirección musical.\n\nEn el bajo, el Prof. Venancio Godoy acompañó al grupo durante décadas hasta el año 2025, cuando se integró Cristian Armin Noguera para continuar con la tradición familiar.\n\nHoy Onda Joven está formada por cuatro integrantes, todos de la familia, y ofrece música en vivo con sonido propio, luces, pantalla LED y boleta legal, animando casamientos, quinceañeras, fiestas patronales, festivales y todo tipo de celebraciones en el Paraguay.',
+        history: 'El grupo musical Onda Joven nació el 21 de septiembre de 1994 en Curuguaty, Paraguay, fundado por los Hermanos Noguera. Desde sus inicios, la música corría por las venas de la familia: Carlino Noguera en guitarra y voz, Virino Noguera en percusión y Alfirio Noguera en el teclado, quien además asumió la dirección musical. En el bajo, el Prof. Venancio Godoy acompañó al grupo durante décadas hasta el año 2025, cuando se integró Cristian Armin Noguera para continuar con la tradición familiar. Hoy Onda Joven está formada por cuatro integrantes, todos de la familia, y ofrece música en vivo con sonido propio, luces, pantalla LED y boleta legal, animando casamientos, quinceañeras, fiestas patronales, festivales y todo tipo de celebraciones en el Paraguay.',
         hero: { subtitle: 'Grupo Musical desde 1994', desc: 'Grupo musical con más de 30 años de trayectoria. Música en vivo para tus eventos: casamientos, quinceañeras, fiestas patronales y más, con sonido propio, luces y pantalla LED.' },
         location: 'Curuguaty, Paraguay',
         map_query: '-24.4633671, -55.6907254',
@@ -101,7 +100,6 @@ window.OJ_DEFAULTS = {
     },
     photos: [
         { url: 'fotos/Integrantes.jpeg', thumb: 'fotos/thumbs/Integrantes.jpeg', title: 'Integrantes de Onda Joven', category: 'integradores' },
-        { url: 'fotos/Integrantes..jpeg', thumb: 'fotos/thumbs/Integrantes..jpeg', title: 'Integrantes', category: 'integradores' },
         { url: 'fotos/Integrantes...jpeg', thumb: 'fotos/thumbs/Integrantes...jpeg', title: 'Integrantes', category: 'integradores' },
         { url: 'fotos/Integrantes....jpeg', thumb: 'fotos/thumbs/Integrantes....jpeg', title: 'Integrantes', category: 'integradores' },
         { url: 'fotos/Casamientos.jpeg', thumb: 'fotos/thumbs/Casamientos.jpeg', title: 'Casamientos', category: 'eventos' },

@@ -193,7 +193,7 @@
         state.site.hero.desc = $('aHeroDesc').value;
         saveConfig().then((msg) => { alert(msg); }).catch(e => { alert('Error: ' + e.message); });
     }
-    function saveStory() { state.site.about = $('aAbout').value; saveConfig().then((msg) => alert(msg)); }
+    function saveStory() { state.site.history = $('aAbout').value; saveConfig().then((msg) => alert(msg)); }
     function saveSocial() {
         state.site.social = { facebook: $('aSocialFb').value, instagram: $('aSocialIg').value, youtube: $('aSocialYt').value, spotify: $('aSocialSp').value, tiktok: $('aSocialTk').value };
         saveConfig().then((msg) => alert(msg));
@@ -207,7 +207,7 @@
     // ===== POPULATE =====
     function populate() {
         const s = state.site;
-        const vars = { aBandName: s.band_name, aHeroSubtitle: (s.hero && s.hero.subtitle), aHeroDesc: (s.hero && s.hero.desc), aLocation: s.location, aMapQuery: s.map_query, aPhone: s.phone, aWhatsapp: s.whatsapp, aEmail: s.email, aAbout: s.about };
+        const vars = { aBandName: s.band_name, aHeroSubtitle: (s.hero && s.hero.subtitle), aHeroDesc: (s.hero && s.hero.desc), aLocation: s.location, aMapQuery: s.map_query, aPhone: s.phone, aWhatsapp: s.whatsapp, aEmail: s.email, aAbout: s.history || s.about };
         Object.keys(vars).forEach(id => { const el = $(id); if (el) el.value = vars[id] || ''; });
         const soc = s.social || {};
         const so = { aSocialFb: 'facebook', aSocialIg: 'instagram', aSocialYt: 'youtube', aSocialSp: 'spotify', aSocialTk: 'tiktok' };

@@ -198,8 +198,6 @@
     }
 
     function renderAbout() {
-        const at = $('aboutText');
-        if (at) at.textContent = state.site.about || 'Onda Joven se fundó el 21 de septiembre de 1994 bajo la dirección de los Hermanos Noguera.';
         const ht = $('historyText');
         if (ht) ht.textContent = state.site.history || '';
         const stats = (state.site.stats && state.site.stats.length) ? state.site.stats
