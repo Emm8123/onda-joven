@@ -1,6 +1,6 @@
 # Onda Joven — Sitio web con panel de administración (Firebase)
 
-Sitio web de la banda **Onda Joven** con un panel de administración oculto para que el dueño gestione el contenido (fotos, redes sociales, repertorio, servicios, historia, ubicación con Google Maps) y contactos vía **WhatsApp**.
+Sitio web del grupo musical **Onda Joven** con un panel de administración oculto para que el dueño gestione el contenido (fotos, redes sociales, repertorio, servicios, historia, ubicación con Google Maps) y contactos vía **WhatsApp**.
 
 - **Base de datos:** Firebase (Firestore + Storage)
 - **Alojamiento:** Netlify (archivos estáticos, no requiere backend)
@@ -17,7 +17,7 @@ onda-joven-firebase/
 │   ├── app.js                  <- Logica publica (carga de datos + render defensivo)
 │   ├── admin.js                <- Panel de administracion (login + CRUD + fotos)
 │   ├── firebase-config.js      <- Configuracion de Firebase y contrasena (COMPLETAR)
-│   └── logo.jpeg               <- Logo de la banda
+│   └── logo.jpeg               <- Logo del grupo
 ├── firestore.rules             <- Reglas de seguridad Firestore
 ├── storage.rules               <- Reglas de seguridad Storage
 └── README.md                   <- Esta guia
@@ -130,7 +130,7 @@ Con eso la página ya está en línea. El dueño entra al panel con el botón de
 
 ### Contacto por WhatsApp
 - El **botón verde flotante** (abajo a la izquierda) y el número de contacto abren WhatsApp con el mensaje:
-  > "Hola, quiero hacer una consulta para contratar a la banda"
+  > "Hola, quiero hacer una consulta para contratar al grupo musical"
 - El número por defecto es `0971 820 528` y se puede cambiar desde el panel (campo **WhatsApp**).
 
 ---

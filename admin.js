@@ -48,8 +48,8 @@
         site: {
             band_name: 'Onda Joven',
             about: 'Onda Joven se fundó el 21 de septiembre de 1994 bajo la dirección de los Hermanos Noguera. Desde entonces, más de tres décadas poniendo a bailar los eventos de nuestro Paraguay.',
-            history: 'La banda nació en 1994 con Los Hermanos Noguera.',
-            hero: { subtitle: 'Banda Musical desde 1994', desc: 'Música en vivo para tus eventos.' },
+            history: 'El grupo nació en 1994 con Los Hermanos Noguera.',
+            hero: { subtitle: 'Grupo Musical desde 1994', desc: 'Música en vivo para tus eventos.' },
             location: 'Curuguaty, Paraguay', map_query: '-24.4633671, -55.6907254',
             phone: '0971 820 528', whatsapp: '0971 820 528', email: '',
             social: {}, services: [
@@ -88,10 +88,10 @@
         // Backup local
         try {
             const raw = localStorage.getItem('onaSiteBackup');
-            if (raw) { const b = JSON.parse(raw); state.site = Object.assign({}, state.site, b); state.site.hero = Object.assign({ subtitle: 'Banda Musical desde 1994', desc: '' }, (b.hero || {})); }
+            if (raw) { const b = JSON.parse(raw); state.site = Object.assign({}, state.site, b); state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (b.hero || {})); }
         } catch (e) {}
         if (firebaseReady) {
-            try { const doc = await CONFIG_DOC.get(); if (doc.exists) { const d = doc.data() || {}; state.site = Object.assign({}, state.site, d); state.site.hero = Object.assign({ subtitle: 'Banda Musical desde 1994', desc: '' }, (d.hero || {})); } } catch (e) { console.error('Error cargando config:', e); }
+            try { const doc = await CONFIG_DOC.get(); if (doc.exists) { const d = doc.data() || {}; state.site = Object.assign({}, state.site, d); state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (d.hero || {})); } } catch (e) { console.error('Error cargando config:', e); }
             try { const snap = await db.collection('photos').orderBy('order', 'asc').get(); const list = []; snap.forEach(p => list.push(Object.assign({ id: p.id }, p.data()))); state.photos = list; } catch (e) { console.error('Error cargando fotos:', e); }
         }
         populate();

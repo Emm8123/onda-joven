@@ -43,8 +43,8 @@
         site: {
             band_name: 'Onda Joven',
             about: 'Onda Joven se fundó el 21 de septiembre de 1994 bajo la dirección de los Hermanos Noguera. Desde entonces, más de tres décadas poniendo a bailar los eventos de nuestro Paraguay: sonido propio, luces, pantalla LED y boleta legal.',
-            history: 'La banda nació en 1994 con Los Hermanos Noguera: Carlino Noguera en guitarra y voz, Virino Noguera en percusión y Alfirio Noguera en teclados, quien además asumió la dirección musical. En el bajo acompañó por décadas el Prof. Venancio Godoy hasta el 2025, año en que se integró Cristian Armin Noguera para continuar la tradición familiar.',
-            hero: { subtitle: 'Banda Musical desde 1994', desc: 'Música en vivo para tus eventos: sonido propio, luces y pantalla LED. Boleta legal.' },
+            history: 'El grupo nació en 1994 con Los Hermanos Noguera: Carlino Noguera en guitarra y voz, Virino Noguera en percusión y Alfirio Noguera en teclados, quien además asumió la dirección musical. En el bajo acompañó por décadas el Prof. Venancio Godoy hasta el 2025, año en que se integró Cristian Armin Noguera para continuar la tradición familiar.',
+            hero: { subtitle: 'Grupo Musical desde 1994', desc: 'Música en vivo para tus eventos: sonido propio, luces y pantalla LED. Boleta legal.' },
             location: 'Curuguaty, Paraguay',
             map_query: '-24.4633671, -55.6907254',
             phone: '0971 820 528',
@@ -184,7 +184,7 @@
 
     // Mensaje de consulta predefinido para WhatsApp
     function waMessage() {
-        return 'Hola, quiero hacer una consulta para contratar a la banda';
+        return 'Hola, quiero hacer una consulta para contratar al grupo musical';
     }
 
     // URL de foto: si existe thumbnail para el grid, la usamos;
@@ -203,7 +203,7 @@
             const backup = loadBackup();
             if (backup) {
                 state.site = Object.assign({}, state.site, backup);
-                state.site.hero = Object.assign({ subtitle: 'Banda Musical desde 1994', desc: '' }, (backup.hero || {}));
+                state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (backup.hero || {}));
                 if (backup.photos && backup.photos.length) {
                     state.photos = backup.photos;
                 }
@@ -216,7 +216,7 @@
                 if (doc.exists) {
                     const data = doc.data() || {};
                     state.site = Object.assign({}, state.site, data);
-                    state.site.hero = Object.assign({ subtitle: 'Banda Musical desde 1994', desc: '' }, (data.hero || {}));
+                    state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (data.hero || {}));
                 }
             } catch (e) {
                 console.error('Error cargando config:', e);
@@ -256,7 +256,7 @@
 
     function renderBrand() {
         const name = state.site.band_name || 'Onda Joven';
-        document.title = name + ' | Banda Musical';
+        document.title = name + ' | Grupo Musical';
         const el = (i) => { const n = $(i); if (n) n.textContent = name; };
         el('navLogo'); el('heroTitle');
         const fl = document.querySelector('.footer-logo'); if (fl) fl.textContent = name;
@@ -479,7 +479,7 @@
 
     async function loadFromDoc() {
         if (firebaseReady) {
-            try { const doc = await CONFIG_DOC.get(); if (doc.exists) { const d = doc.data(); state.site = Object.assign({}, state.site, d); state.site.hero = Object.assign({ subtitle: 'Banda Musical desde 1994', desc: '' }, (d.hero || {})); } } catch (e) {}
+            try { const doc = await CONFIG_DOC.get(); if (doc.exists) { const d = doc.data(); state.site = Object.assign({}, state.site, d); state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (d.hero || {})); } } catch (e) {}
             try { const snap = await db.collection('photos').orderBy('order', 'asc').get(); const l = []; snap.forEach(p => l.push(Object.assign({ id: p.id }, p.data()))); state.photos = l; state.filteredPhotos = l.slice(); } catch (e) {}
         }
         renderAll();

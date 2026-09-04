@@ -2,7 +2,7 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
 
-    // Fotos de la banda: lectura publica (CDN), escritura autenticada
+    // Fotos del grupo musical: lectura publica (CDN), escritura autenticada
     match /fotos/{allPaths=**} {
       allow read: if true;
       allow write: if request.auth != null;
