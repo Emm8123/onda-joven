@@ -46,7 +46,7 @@
             about: 'Onda Joven se fundó el 21 de septiembre de 1994 bajo la dirección de los Hermanos Noguera. Desde entonces, más de tres décadas poniendo a bailar los eventos de nuestro Paraguay.',
             history: 'La banda nació en 1994 con Los Hermanos Noguera.',
             hero: { subtitle: 'Banda Musical desde 1994', desc: 'Música en vivo para tus eventos.' },
-            location: '', map_query: '',
+            location: 'Curuguaty, Paraguay', map_query: '-24.4633671, -55.6907254',
             phone: '0971 820 528', whatsapp: '0971 820 528', email: '',
             social: {}, services: [],
             repertoire: {
