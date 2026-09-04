@@ -205,12 +205,12 @@
                 const snap = await db.collection('photos').orderBy('order', 'asc').get();
                 const list = [];
                 snap.forEach(p => list.push(Object.assign({ id: p.id }, p.data())));
-                state.photos = list;
-                state.filteredPhotos = list.slice();
+                if (list.length > 0) {
+                    state.photos = list;
+                    state.filteredPhotos = list.slice();
+                }
             } catch (e) {
                 console.error('Error cargando fotos:', e);
-                state.photos = [];
-                state.filteredPhotos = [];
             }
         }
 
@@ -228,7 +228,6 @@
         safe(renderContact);
         safe(renderMap);
         safe(updateWaFloat);
-        if (state.authed && window.OJAdmin) window.OJAdmin.populate();
     }
 
     function updateWaFloat() {
