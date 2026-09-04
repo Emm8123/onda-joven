@@ -19,8 +19,8 @@
     let db = null, storage = null, CONFIG_DOC = null;
     let firebaseReady = false;
     try {
-        if (typeof firebase !== 'undefined' && typeof firebaseConfig !== 'undefined') {
-            firebase.initializeApp(firebaseConfig);
+        if (window.FIREBASE_CONFIGURED && typeof firebase !== 'undefined' && window.firebaseConfig) {
+            firebase.initializeApp(window.firebaseConfig);
             db = firebase.firestore();
             storage = firebase.storage();
             CONFIG_DOC = db.collection('config').doc('principal');
@@ -135,17 +135,17 @@
             ]
         },
         photos: [
-            { url: 'fotos/Integrantes.jpeg', thumb: 'fotos/Integrantes.jpeg', title: 'Integrantes de Onda Joven', category: 'integradores' },
-            { url: 'fotos/Integrantes..jpeg', thumb: 'fotos/Integrantes..jpeg', title: 'Integrantes', category: 'integradores' },
-            { url: 'fotos/Integrantes...jpeg', thumb: 'fotos/Integrantes...jpeg', title: 'Integrantes', category: 'integradores' },
-            { url: 'fotos/Integrantes....jpeg', thumb: 'fotos/Integrantes....jpeg', title: 'Integrantes', category: 'integradores' },
-            { url: 'fotos/Casamientos.jpeg', thumb: 'fotos/Casamientos.jpeg', title: 'Casamientos', category: 'eventos' },
-            { url: 'fotos/Festivales.jpeg', thumb: 'fotos/Festivales.jpeg', title: 'Festivales', category: 'eventos' },
-            { url: 'fotos/Fiesta de colaci%C3%B3n.jpeg', thumb: 'fotos/Fiesta de colaci%C3%B3n.jpeg', title: 'Fiesta de Colación', category: 'eventos' },
-            { url: 'fotos/Fiesta de colaci%C3%B3n..jpeg', thumb: 'fotos/Fiesta de colaci%C3%B3n..jpeg', title: 'Fiesta de Colación', category: 'eventos' },
-            { url: 'fotos/Fiestas%20patronales.jpeg', thumb: 'fotos/Fiestas%20patronales.jpeg', title: 'Fiestas Patronales', category: 'eventos' },
-            { url: 'fotos/Fiestas%20privadas.jpeg', thumb: 'fotos/Fiestas%20privadas.jpeg', title: 'Fiestas Privadas', category: 'eventos' },
-            { url: 'fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg', thumb: 'fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg', title: 'Fiestas Privadas y Cumpleaños', category: 'eventos' }
+            { url: 'fotos/Integrantes.jpeg', thumb: 'fotos/thumbs/Integrantes.jpeg', title: 'Integrantes de Onda Joven', category: 'integradores' },
+            { url: 'fotos/Integrantes..jpeg', thumb: 'fotos/thumbs/Integrantes..jpeg', title: 'Integrantes', category: 'integradores' },
+            { url: 'fotos/Integrantes...jpeg', thumb: 'fotos/thumbs/Integrantes...jpeg', title: 'Integrantes', category: 'integradores' },
+            { url: 'fotos/Integrantes....jpeg', thumb: 'fotos/thumbs/Integrantes....jpeg', title: 'Integrantes', category: 'integradores' },
+            { url: 'fotos/Casamientos.jpeg', thumb: 'fotos/thumbs/Casamientos.jpeg', title: 'Casamientos', category: 'eventos' },
+            { url: 'fotos/Festivales.jpeg', thumb: 'fotos/thumbs/Festivales.jpeg', title: 'Festivales', category: 'eventos' },
+            { url: 'fotos/Fiesta de colaci%C3%B3n.jpeg', thumb: 'fotos/thumbs/Fiesta de colaci%C3%B3n.jpeg', title: 'Fiesta de Colación', category: 'eventos' },
+            { url: 'fotos/Fiesta de colaci%C3%B3n..jpeg', thumb: 'fotos/thumbs/Fiesta de colaci%C3%B3n..jpeg', title: 'Fiesta de Colación', category: 'eventos' },
+            { url: 'fotos/Fiestas%20patronales.jpeg', thumb: 'fotos/thumbs/Fiestas%20patronales.jpeg', title: 'Fiestas Patronales', category: 'eventos' },
+            { url: 'fotos/Fiestas%20privadas.jpeg', thumb: 'fotos/thumbs/Fiestas%20privadas.jpeg', title: 'Fiestas Privadas', category: 'eventos' },
+            { url: 'fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg', thumb: 'fotos/thumbs/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg', title: 'Fiestas Privadas y Cumpleaños', category: 'eventos' }
         ],
         filteredPhotos: [],
         authed: false,

@@ -18,6 +18,15 @@ const firebaseConfig = {
 };
 
 // ============================================================
+// EXPONE la configuracion en una variable global segura.
+// FIREBASE_CONFIGURED es true SOLO cuando pusiste valores reales.
+// Mientras esten los placeholders (TU_/tu-), la pagina NO intenta
+// conectar con Firebase: se evita el cuelgue y la lentitud.
+// ============================================================
+window.firebaseConfig = firebaseConfig;
+window.FIREBASE_CONFIGURED = !!(firebaseConfig.apiKey && firebaseConfig.apiKey.indexOf('TU_') !== 0 && firebaseConfig.projectId && firebaseConfig.projectId.indexOf('tu-') !== 0 && firebaseConfig.appId && firebaseConfig.appId.indexOf('TU_') !== 0);
+
+// ============================================================
 // CONTRASENA DEL PANEL DE ADMINISTRACION
 // ============================================================
 // Escribe aqui la contrasena que quieras usar para entrar al panel

@@ -17,8 +17,8 @@
     let db = null, storage = null, CONFIG_DOC = null;
     let firebaseReady = false;
     try {
-        if (typeof firebase !== 'undefined' && typeof firebaseConfig !== 'undefined') {
-            firebase.initializeApp(firebaseConfig);
+        if (window.FIREBASE_CONFIGURED && typeof firebase !== 'undefined' && window.firebaseConfig) {
+            firebase.initializeApp(window.firebaseConfig);
             db = firebase.firestore();
             storage = firebase.storage();
             CONFIG_DOC = db.collection('config').doc('principal');
@@ -26,6 +26,10 @@
         }
     } catch (e) {
         console.warn('Firebase no disponible:', e.message);
+    }
+    if (!firebaseReady) {
+        // Sin Firebase real: todo se guarda SOLO en localStorage (rapido, sin red).
+        try { if (window.state) window.state.firebaseWritable = false; } catch (e) {}
     }
 
     // ===== STORAGE SEGURO =====
@@ -40,7 +44,7 @@
     // ===== ESTADO =====
     const state = {
         authed: false,
-        firebaseWritable: true,
+        firebaseWritable: firebaseReady,
         site: {
             band_name: 'Onda Joven',
             about: 'Onda Joven se fundó el 21 de septiembre de 1994 bajo la dirección de los Hermanos Noguera. Desde entonces, más de tres décadas poniendo a bailar los eventos de nuestro Paraguay.',
@@ -93,11 +97,16 @@
         populate();
     }
 
-    // ===== SAVE =====
-    async function saveConfig() {
+    // ===== SAVE (nunca debe colgarse: timeout de 4s) =====
+    function saveConfig() {
         try { localStorage.setItem('onaSiteBackup', JSON.stringify(state.site)); } catch (e) {}
-        if (!firebaseReady || state.firebaseWritable === false) return;
-        try { await CONFIG_DOC.set(state.site, { merge: true }); } catch (e) { console.error('Error guardando:', e); }
+        return new Promise(function (resolve) {
+            if (!firebaseReady || state.firebaseWritable === false) { resolve(); return; }
+            const timer = setTimeout(function () { console.warn('Timeout Firestore: se guardo solo local.'); resolve(); }, 4000);
+            CONFIG_DOC.set(state.site, { merge: true })
+                .then(function () { clearTimeout(timer); resolve(); })
+                .catch(function (e) { clearTimeout(timer); console.error('Error guardando:', e); state.firebaseWritable = false; resolve(); });
+        });
     }
     function saveBasic() {
         state.site.band_name = $('aBandName').value || 'Onda Joven';

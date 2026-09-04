@@ -432,12 +432,16 @@
 <!-- Boton flotante de WhatsApp: consulta de contratacion -->
 <a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener" title="Contratar por WhatsApp"><i class="fab fa-whatsapp"></i></a>
 
-<!-- FIREBASE MODULES (v9 compat via CDN) -->
+<!-- FIREBASE: se carga SOLO si la configuracion esta completa (pagina rapida mientras no) -->
 <script src="firebase-config.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script>
+    if (window.FIREBASE_CONFIGURED) {
+        document.write('<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"><\/script>');
+        document.write('<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"><\/script>');
+        document.write('<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"><\/script>');
+        document.write('<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"><\/script>');
+    }
+</script>
 
 <script src="app.js"></script>
 </body>
