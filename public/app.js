@@ -113,7 +113,19 @@
                 { label: 'Integrantes', value: '5' }
             ]
         },
-        photos: [],
+        photos: [
+            { url: 'fotos/Integrantes.jpeg', thumb: 'fotos/Integrantes.jpeg', title: 'Integrantes de Onda Joven', category: 'integradores' },
+            { url: 'fotos/Integrantes..jpeg', thumb: 'fotos/Integrantes..jpeg', title: 'Integrantes', category: 'integradores' },
+            { url: 'fotos/Integrantes...jpeg', thumb: 'fotos/Integrantes...jpeg', title: 'Integrantes', category: 'integradores' },
+            { url: 'fotos/Integrantes....jpeg', thumb: 'fotos/Integrantes....jpeg', title: 'Integrantes', category: 'integradores' },
+            { url: 'fotos/Casamientos.jpeg', thumb: 'fotos/Casamientos.jpeg', title: 'Casamientos', category: 'eventos' },
+            { url: 'fotos/Festivales.jpeg', thumb: 'fotos/Festivales.jpeg', title: 'Festivales', category: 'eventos' },
+            { url: 'fotos/Fiesta de colaci%C3%B3n.jpeg', thumb: 'fotos/Fiesta de colaci%C3%B3n.jpeg', title: 'Fiesta de Colación', category: 'eventos' },
+            { url: 'fotos/Fiesta de colaci%C3%B3n..jpeg', thumb: 'fotos/Fiesta de colaci%C3%B3n..jpeg', title: 'Fiesta de Colación', category: 'eventos' },
+            { url: 'fotos/Fiestas%20patronales.jpeg', thumb: 'fotos/Fiestas%20patronales.jpeg', title: 'Fiestas Patronales', category: 'eventos' },
+            { url: 'fotos/Fiestas%20privadas.jpeg', thumb: 'fotos/Fiestas%20privadas.jpeg', title: 'Fiestas Privadas', category: 'eventos' },
+            { url: 'fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg', thumb: 'fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg', title: 'Fiestas Privadas y Cumpleaños', category: 'eventos' }
+        ],
         filteredPhotos: [],
         authed: false,
         firebaseWritable: true,
@@ -171,7 +183,11 @@
             if (backup) {
                 state.site = Object.assign({}, state.site, backup);
                 state.site.hero = Object.assign({ subtitle: 'Banda Musical desde 1994', desc: '' }, (backup.hero || {}));
+                if (backup.photos && backup.photos.length) {
+                    state.photos = backup.photos;
+                }
             }
+            state.filteredPhotos = state.photos.slice();
         }
         if (firebaseReady) {
             try {
