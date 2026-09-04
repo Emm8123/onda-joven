@@ -1,9 +1,10 @@
-# Onda Joven — Sitio web con panel de administración (Firebase)
+# Onda Joven — Sitio web con panel de administración
 
-Sitio web del grupo musical **Onda Joven** con un panel de administración oculto para que el dueño gestione el contenido (fotos, redes sociales, repertorio, servicios, historia, ubicación con Google Maps) y contactos vía **WhatsApp**.
+Sitio web del grupo musical **Onda Joven** con un panel de administración independiente para que el dueño edite **todo** el contenido: nombre, héroe, historia, redes sociales, fotos, repertorio, servicios, ubicación (Google Maps) y contactos (WhatsApp). Todo **publicable para todos los visitantes** en 1-2 minutos, sin Firebase.
 
-- **Base de datos:** Firebase (Firestore + Storage)
-- **Alojamiento:** Netlify (archivos estáticos, no requiere backend)
+- **Alojamiento:** GitHub Pages (`https://emm8123.github.io/onda-joven/`)
+- **Panel:** `https://emm8123.github.io/onda-joven/admin.html` — contraseña en `firebase-config.js`
+- **Guardado en la nube:** cada "Guardar" del panel publica `data.json` al repo vía la API de GitHub; GitHub Pages lo redistribuye automáticamente.
 - **Idioma:** Español
 
 ---
@@ -12,130 +13,96 @@ Sitio web del grupo musical **Onda Joven** con un panel de administración ocult
 
 ```
 onda-joven-firebase/
-├── public/                     <- Carpeta que se sube a Netlify
-│   ├── index.html              <- Pagina principal
-│   ├── app.js                  <- Logica publica (carga de datos + render defensivo)
-│   ├── admin.js                <- Panel de administracion (login + CRUD + fotos)
-│   ├── firebase-config.js      <- Configuracion de Firebase y contrasena (COMPLETAR)
-│   └── logo.jpeg               <- Logo del grupo
-├── firestore.rules             <- Reglas de seguridad Firestore
-├── storage.rules               <- Reglas de seguridad Storage
-└── README.md                   <- Esta guia
+├── index.html            <- Página principal
+├── app.js                <- Lógica pública (carga de data.json + render defensivo)
+├── admin.html            <- Panel de administración independiente
+├── admin.js              <- Lógica del panel (login + edición + publicación GitHub)
+├── firebase-config.js    <- Configuración (contraseña + token de GitHub)
+├── data.json             <- Contenido publicado por el panel (se genera solo)
+├── _nojekyll             <- Evita que Jekyll interfiera en GitHub Pages
+├── firestore.rules       <- Reglas Firestore (solo si algún día se usa Firebase)
+├── storage.rules         <- Reglas Storage (solo si algún día se usa Firebase)
+└── README.md             <- Esta guía
 ```
 
-### Buena arquitectura (importante)
+### Características de la arquitectura
 - El JS está **dividido en módulos** (`app.js` para lo público, `admin.js` para el panel).
-- Cada sección de la página se renderiza con **try/catch por separado** (`renderAll` usa la función `safe()`). Si falla una sección (p.ej. la galería), **las demás se siguen mostrando** y la página nunca se cae.
-- **Fotos en buena calidad sin frenar la página:** al subir una foto se generan dos versiones:
-  - **Thumbnail comprimido** (máx. 900px) → se usa en la grilla de la galería (carga rápida).
-  - **Original en alta resolución** → se usa cuando se amplía en el visor (lightbox).
-  - Todas las imágenes de la galería usan `loading="lazy"`, `decoding="async"` y `onerror` con respaldo.
+- Cada sección se renderiza con **try/catch por separado** (`safe()`): si una falla, las demás siguen visibles.
+- **Fotos sin frenar la página:** al subir una foto se genera el **thumbnail comprimido** (máx. 900px) para la grilla y se usa el **original** solo al ampliar. La galería usa `loading="lazy"`, `decoding="async"` y `onerror` con respaldo.
+- **El panel nunca se cuelga:** todo `saveConfig()` responde siempre con un mensaje (con timeout), aunque la red falle.
 
 ---
 
-## PASO 1 — Crear el proyecto en Firebase
+## Cómo funciona el guardado (importante)
 
-1. Entra a https://console.firebase.google.com y crea un proyecto llamado `onda-joven`.
-2. Ve a **Configuración del proyecto → General → Tus apps** y haz clic en **"Agregar app"** → elige **Web** (ícono `</>`).
-   - Ponle un nombre, p.ej. `onda-joven-web`. No es necesario hosting por aquí.
-   - Copia el objeto `firebaseConfig` que te muestra.
-3. Abre `public/firebase-config.js` y **pega** tus valores en las comillas:
+- Cuando el dueño pulsa cualquier **Guardar / Agregar** en el panel:
+  1. Se guarda al instante en el **localStorage** del navegador (cambios visibles de inmediato en ese dispositivo).
+  2. Se **publica `data.json` al repositorio** de GitHub usando la API.
+  3. GitHub Pages reconstruye y los cambios quedan visibles para **todos los visitantes en 1-2 minutos**.
+
+El sitio público lee primero el `data.json` publicado y luego pisa con el respaldo local del dispositivo.
+
+---
+
+## PASO 1 — Configurar el token de GitHub (el panel publica)
+
+Abre `firebase-config.js` y comprueba esta sección:
 
 ```js
-const firebaseConfig = {
-  apiKey: "...",
-  authDomain: "...",
-  projectId: "onda-joven",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "..."
-};
+window.GITHUB_OWNER = 'Emm8123';
+window.GITHUB_REPO = 'onda-joven';
+window.GITHUB_TOKEN = 'ghp_...';
 ```
 
-4. En ese mismo archivo cambia la contraseña del panel:
+**Recomendado (seguro):** crea un token con permiso SOLO de este repositorio, así si alguien lo ve no puede tocar tus otros proyectos:
+
+1. GitHub → avatar → **Settings → Developer settings → Fine-grained tokens → Generate new token**.
+2. **Repository access:** *Only selected repositories* → `Emm8123/onda-joven`.
+3. **Permissions → Contents:** *Read and write*.
+4. **Generate token** y pega el resultado en `window.GITHUB_TOKEN`.
+
+> Nota de seguridad: ese token queda visible para quien abra el sitio. Por eso conviene el token *fine-grained* restringido a este único repo.
+
+---
+
+## PASO 2 — Contraseña del panel
+
+En el mismo `firebase-config.js`:
 
 ```js
-const ADMIN_PASSWORD = "escribeUnaContrasenaSegura";
+window.ADMIN_PASSWORD = "escribeUnaContrasenaSegura";
 ```
 
 ---
 
-## PASO 2 — Habilitar los servicios en Firebase
+## PASO 3 — Entrar al panel
 
-### Cloud Firestore (base de datos)
-1. En el menú lateral: **Build → Firestore Database → Crear base de datos**.
-2. Elige **Modo de prueba** (temporal) y una ubicación cercana (ej. `nam5` / `us-central`).
-3. **IMPORTANTE:** luego aplica las reglas de seguridad. Crea un archivo `firestore.rules` local con este contenido (o pégalo en la pestaña *Rules* de la consola):
-
-```
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /config/{doc}        { allow read: if true;  allow write: if request.auth != null; }
-    match /photos/{photo}      { allow read: if true;  allow write: if request.auth != null; }
-  }
-}
-```
-
-*(El archivo `firestore.rules` de este proyecto ya lo incluye.)*
-
-### Storage (para las fotos)
-1. En el menú: **Build → Storage → Empezar**.
-2. Acepta el bucket por defecto.
-3. Aplica estas reglas en la pestaña *Rules* (ya están en `storage.rules`):
-
-```
-rules_version = '2';
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /fotos/{allPaths=**} { allow read: if true;  allow write: if request.auth != null; }
-    match /{allPaths=**}       { allow read, write: if request.auth != null; }
-  }
-}
-```
-
-### Authentication (para que el panel pueda escribir)
-En **Build → Authentication → Empezar**, habilita el proveedor **Anónimo** (*Sign-in method* → Anonymous → Habilitar). Es necesario para que las reglas de `request.auth != null` funcionen al guardar desde el panel.
+1. Abre `https://emm8123.github.io/onda-joven/admin.html`.
+2. Escribe la **contraseña** de `firebase-config.js` y pulsa **Entrar**.
+3. Desde ahí puedes editar **absolutamente todo**:
+   - **Información principal:** nombre del grupo, frase y descripción del hero.
+   - **Redes sociales:** Facebook, Instagram, YouTube, Spotify, TikTok.
+   - **Fotos:** arrastrar/drop o clic; se elige categoría (Integrantes, Conciertos, Eventos…) y se genera la miniatura automáticamente. También se pueden **eliminar** (se borran del repo).
+   - **Ubicación y contacto:** texto, query de Google Maps, teléfono, WhatsApp, email.
+   - **Historia** (Quiénes somos).
+   - **Repertorio:** agrega canciones por categoría (Polkas, Cumbias, Sertanejo/Música Brasileña, etc.) y elimina las que quieras.
+   - **Servicios:** agrega/elimina los lugares donde tocan (Casamientos, Quinceañeras, Festivales…).
+4. Cada botón de guardar muestra el resultado: publicado para todos (1-2 min) o guardado solo en el navegador si falló la conexión.
 
 ---
 
-## PASO 3 — Probar en tu computadora (opcional)
+## PASO 4 — Probar en tu computadora (opcional)
 
-Abre `public/index.html` directamente en el navegador (doble clic). Como Firebase aún no tiene datos, verás el diseño con textos por defecto. El panel se abre con el botón de **engranaje** (abajo a la derecha) usando la contraseña de `firebase-config.js`.
+```bash
+node server.js
+```
 
----
-
-## PASO 4 — Publicar en Netlify
-
-1. Crea una cuenta en https://app.netlify.com.
-2. Arrastra y suelta la carpeta **`public`** en el panel de Netlify (método más simple).
-   - O usa **Deploy manually → Drag and drop**.
-3. Netlify generará una URL tipo `https://onda-joven.netlify.app`.
-
-Con eso la página ya está en línea. El dueño entra al panel con el botón de engranaje **en la URL publicada** y la contraseña que definió.
-
----
-
-## Uso del panel de administración
-
-1. Abre la URL del sitio publicada.
-2. Haz clic en el **engranaje** (abajo a la derecha).
-3. Ingresa la **contraseña** de `firebase-config.js`.
-4. Desde ahí podrás:
-   - Editar nombre, frase y descripción del inicio (hero).
-   - Configurar **redes sociales** (Facebook, Instagram, YouTube, Spotify, TikTok).
-   - **Subir fotos** (se crea automáticamente la versión comprimida para que la página sea rápida).
-   - Configurar **ubicación** de Google Maps, teléfono, **WhatsApp** y email.
-   - Editar la **historia**, el **repertorio**, los **servicios** y los **testimonios**.
-
-### Contacto por WhatsApp
-- El **botón verde flotante** (abajo a la izquierda) y el número de contacto abren WhatsApp con el mensaje:
-  > "Hola, quiero hacer una consulta para contratar al grupo musical"
-- El número por defecto es `0971 820 528` y se puede cambiar desde el panel (campo **WhatsApp**).
+Abre `http://localhost:3000`. El panel: `http://localhost:3000/admin.html`.
 
 ---
 
 ## Notas de seguridad
 
-- El panel usa una contraseña definida en el código del cliente (`ADMIN_PASSWORD`). Esto es una protección **superficial**: quien revise el código fuente del sitio podrá verla. Para una protección real, se recomienda migrar a **Firebase Authentication** con email/contraseña y quitar la comparación de `ADMIN_PASSWORD`. Este proyecto ya está preparado para escribir con usuarios autenticados (usa Firebase Auth anónimo tras validar la contraseña).
-- Las reglas de Firestore/Storage permiten **lectura pública** (necesaria para que el sitio muestre el contenido) y **escritura solo a usuarios autenticados**.
+- La contraseña del panel vive en el código del cliente: quien revise el código fuente del sitio podrá verla. Es una protección **superficial** pensada para que el dueño gestione su propio contenido; para protección real se migraría a autenticación con servicio (por ejemplo Firebase Auth).
+- El token de GitHub es lo que permite publicar. Mantenelo con los **menores permisos posibles** (solo `Contents: Read and write` en este repo).
+- Las reglas `firestore.rules` / `storage.rules` solo aplican si algún día se opta por Firebase; actualmente **no se usa Firebase** y el sitio no depende de él.

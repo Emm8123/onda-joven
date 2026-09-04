@@ -197,9 +197,24 @@
         catch (e) { return null; }
     }
     async function loadData() {
-        // Respaldo LOCAL: si Firebase no esta configurado (o fallo), la
-        // pagina publica lee lo que se guardo desde el panel en localStorage.
+        // Cuando Firebase NO esta configurado, la pagina lee lo publicado:
+        // 1) data.json del sitio (lo que el admin publica via GitHub)
+        // 2) respaldo local del navegador (ultima edicion de este dispositivo)
         if (!firebaseReady) {
+            try {
+                const r = await fetch('data.json?v=' + Date.now(), { cache: 'no-store' });
+                if (r.ok) {
+                    const d = await r.json();
+                    const cloud = (d && d.site) ? d.site : (d || {});
+                    state.site = Object.assign({}, state.site, cloud);
+                    state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (cloud.hero || {}));
+                    if (d && Array.isArray(d.photos) && d.photos.length) {
+                        state.photos = d.photos;
+                    }
+                }
+            } catch (e) {
+                console.warn('No se pudo leer data.json:', e);
+            }
             const backup = loadBackup();
             if (backup) {
                 state.site = Object.assign({}, state.site, backup);

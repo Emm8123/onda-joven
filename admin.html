@@ -71,6 +71,8 @@
         <h1>Panel de Admin</h1>
         <p>Ingresa tu contraseña para acceder</p>
         <input type="password" id="adminPasswordInput" placeholder="Contraseña" autocomplete="current-password" aria-describedby="loginError" onkeydown="if(event.key==='Enter')OJAdmin.doLogin()">
+        <input type="password" id="ghTokenInput" placeholder="Token de GitHub (para publicar)" autocomplete="off" style="margin-top:-8px">
+        <p style="color:var(--text-dim);font-size:.78rem;margin:-8px 0 14px;text-align:left">Si querés que los cambios se publiquen para todos, pegá aquí tu token de GitHub (solo se guarda en este navegador).</p>
         <div class="login-error" id="loginError" role="alert"></div>
         <button class="btn-login" onclick="OJAdmin.doLogin()">Entrar</button>
     </div>

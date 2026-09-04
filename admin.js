@@ -28,8 +28,74 @@
         console.warn('Firebase no disponible:', e.message);
     }
     if (!firebaseReady) {
-        // Sin Firebase real: todo se guarda SOLO en localStorage (rapido, sin red).
+        // Sin Firebase real: el guardado se publica via GitHub (data.json).
         try { if (window.state) window.state.firebaseWritable = false; } catch (e) {}
+    }
+
+    // ===== GITHUB (modo nube SIN Firebase: publica data.json) =====
+    // El token se guarda en este navegador (campo "Token de GitHub" del login),
+    // NO en el codigo. Si se borra el campo, se recupera copiandolo de nuevo.
+    function ghToken() {
+        try {
+            const s = localStorage.getItem('onaGhToken') || sessionStorage.getItem('onaGhToken');
+            if (s) return s;
+        } catch (e) {}
+        return String(window.GITHUB_TOKEN || '').trim();
+    }
+    function saveGhToken() {
+        const el = $('ghTokenInput');
+        const v = el ? el.value.trim() : '';
+        try { if (v) { localStorage.setItem('onaGhToken', v); } else { localStorage.removeItem('onaGhToken'); } } catch (e) {}
+        if (el) el.value = v;
+        return v;
+    }
+    function ghEnabled() { return !!(ghToken() && window.GITHUB_OWNER && window.GITHUB_REPO); }
+    function ghBase() { return 'https://api.github.com/repos/' + window.GITHUB_OWNER + '/' + window.GITHUB_REPO; }
+    function ghHeaders() { return { 'Authorization': 'token ' + ghToken(), 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' }; }
+    function ghRaw(path) { return 'https://raw.githubusercontent.com/' + window.GITHUB_OWNER + '/' + window.GITHUB_REPO + '/main/' + path; }
+    function ghB64(str) { try { return btoa(unescape(encodeURIComponent(str))); } catch (e) { return ''; } }
+    function ghEncodePath(p) { return String(p).split('/').map(function (s) { return encodeURIComponent(s); }).join('/'); }
+    function ghFileToB64(fileOrBlob) {
+        return new Promise(function (resolve, reject) {
+            const r = new FileReader();
+            r.onload = function () { const c = String(r.result); const i = c.indexOf(','); resolve(i >= 0 ? c.slice(i + 1) : c); };
+            r.onerror = function () { reject(new Error('No se pudo leer el archivo')); };
+            r.readAsDataURL(fileOrBlob);
+        });
+    }
+    function ghTimeout(promise, ms) {
+        return Promise.race([promise, new Promise(function (_, reject) { setTimeout(function () { reject(new Error('Tiempo agotado al publicar')); }, ms); })]);
+    }
+    function ghGet(path) {
+        return new Promise(function (resolve) {
+            fetch(ghBase() + '/contents/' + ghEncodePath(path) + '?ref=main', { headers: ghHeaders() })
+                .then(function (r) { if (!r.ok) { resolve(null); return; } r.json().then(resolve).catch(function () { resolve(null); }); })
+                .catch(function () { resolve(null); });
+        });
+    }
+    function ghWrite(path, contentB64, message, sha, isDelete) {
+        const body = isDelete
+            ? { message: message, sha: sha, branch: 'main' }
+            : { message: message, content: contentB64, sha: sha || null, branch: 'main' };
+        return fetch(ghBase() + '/contents/' + ghEncodePath(path), {
+            method: isDelete ? 'DELETE' : 'PUT',
+            headers: ghHeaders(),
+            body: JSON.stringify(body)
+        }).then(function (r) { return r.ok; });
+    }
+    function ghDelete(path) {
+        return ghGet(path).then(function (f) {
+            if (!f) return true;
+            return ghWrite(path, '', 'Eliminar foto', f.sha, true);
+        });
+    }
+    function ghPublish() {
+        const body = { site: state.site, photos: state.photos, saved_at: new Date().toISOString() };
+        const b64 = ghB64(JSON.stringify(body, null, 2));
+        return ghGet('data.json').then(function (existing) {
+            return ghWrite('data.json', b64, 'Actualizar contenido de Onda Joven', existing ? existing.sha : null, false)
+                .then(function (ok) { if (!ok) throw new Error('GitHub rechazó el guardado'); });
+        });
     }
 
     // ===== STORAGE SEGURO =====
@@ -85,10 +151,31 @@
 
     // ===== CARGAR DATOS =====
     async function loadData() {
-        // Backup local
+        // En modo GitHub: leemos primero lo publicado (data.json) y luego
+        // se pisa con la ultima edicion local de este navegador.
+        if (!firebaseReady && ghEnabled()) {
+            try {
+                const r = await fetch('data.json?v=' + Date.now(), { cache: 'no-store' });
+                if (r.ok) {
+                    const d = await r.json();
+                    const cloud = (d && d.site) ? d.site : {};
+                    state.site = Object.assign({}, state.site, cloud);
+                    state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (cloud.hero || {}));
+                    if (d && Array.isArray(d.photos)) {
+                        state.photos = d.photos.map(p => Object.assign({}, p, { id: p.id || p.url }));
+                    }
+                }
+            } catch (e) { }
+        }
+        // Backup local (ultima edicion de este dispositivo)
         try {
             const raw = localStorage.getItem('onaSiteBackup');
-            if (raw) { const b = JSON.parse(raw); state.site = Object.assign({}, state.site, b); state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (b.hero || {})); }
+            if (raw) {
+                const b = JSON.parse(raw);
+                state.site = Object.assign({}, state.site, b);
+                state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (b.hero || {}));
+                if (b.photos && b.photos.length) state.photos = b.photos.map(p => Object.assign({}, p, { id: p.id || p.url }));
+            }
         } catch (e) {}
         if (firebaseReady) {
             try { const doc = await CONFIG_DOC.get(); if (doc.exists) { const d = doc.data() || {}; state.site = Object.assign({}, state.site, d); state.site.hero = Object.assign({ subtitle: 'Grupo Musical desde 1994', desc: '' }, (d.hero || {})); } } catch (e) { console.error('Error cargando config:', e); }
@@ -97,15 +184,25 @@
         populate();
     }
 
-    // ===== SAVE (nunca debe colgarse: timeout de 4s) =====
+    // ===== SAVE (nunca debe colgarse; responde siempre con un mensaje) =====
     function saveConfig() {
-        try { localStorage.setItem('onaSiteBackup', JSON.stringify(state.site)); } catch (e) {}
+        const local = Object.assign({}, state.site, { photos: state.photos });
+        try { localStorage.setItem('onaSiteBackup', JSON.stringify(local)); } catch (e) {}
         return new Promise(function (resolve) {
-            if (!firebaseReady || state.firebaseWritable === false) { resolve(); return; }
-            const timer = setTimeout(function () { console.warn('Timeout Firestore: se guardo solo local.'); resolve(); }, 4000);
-            CONFIG_DOC.set(state.site, { merge: true })
-                .then(function () { clearTimeout(timer); resolve(); })
-                .catch(function (e) { clearTimeout(timer); console.error('Error guardando:', e); state.firebaseWritable = false; resolve(); });
+            if (firebaseReady && state.firebaseWritable !== false) {
+                const timer = setTimeout(function () { console.warn('Timeout Firestore: se guardo solo local.'); resolve('Guardado (solo este navegador: sin conexión con Firebase)'); }, 4000);
+                CONFIG_DOC.set(state.site, { merge: true })
+                    .then(function () { clearTimeout(timer); resolve('Guardado'); })
+                    .catch(function (e) { clearTimeout(timer); console.error('Error guardando:', e); state.firebaseWritable = false; resolve('Guardado (solo este navegador: no se pudo conectar)'); });
+                return;
+            }
+            if (ghEnabled()) {
+                ghTimeout(ghPublish(), 25000)
+                    .then(function () { resolve('Guardado y publicado. Todos los visitantes lo verán en 1–2 minutos.'); })
+                    .catch(function (e) { console.error('Error publicando en GitHub:', e); resolve('Guardado en este navegador. No se pudo publicar: ' + e.message + '. Revisa la conexión y vuelve a guardar.'); });
+                return;
+            }
+            resolve('Guardado (solo este navegador: falta configurar la nube)');
         });
     }
     function saveBasic() {
@@ -113,17 +210,17 @@
         state.site.hero = state.site.hero || {};
         state.site.hero.subtitle = $('aHeroSubtitle').value;
         state.site.hero.desc = $('aHeroDesc').value;
-        saveConfig().then(() => { alert('Guardado'); }).catch(e => { alert('Error: ' + e.message); });
+        saveConfig().then((msg) => { alert(msg); }).catch(e => { alert('Error: ' + e.message); });
     }
-    function saveStory() { state.site.about = $('aAbout').value; saveConfig().then(() => alert('Guardado')); }
+    function saveStory() { state.site.about = $('aAbout').value; saveConfig().then((msg) => alert(msg)); }
     function saveSocial() {
         state.site.social = { facebook: $('aSocialFb').value, instagram: $('aSocialIg').value, youtube: $('aSocialYt').value, spotify: $('aSocialSp').value, tiktok: $('aSocialTk').value };
-        saveConfig().then(() => alert('Redes guardadas'));
+        saveConfig().then((msg) => alert(msg));
     }
     function saveContact() {
         state.site.location = $('aLocation').value; state.site.map_query = $('aMapQuery').value;
         state.site.phone = $('aPhone').value; state.site.whatsapp = $('aWhatsapp').value; state.site.email = $('aEmail').value;
-        saveConfig().then(() => alert('Guardado'));
+        saveConfig().then((msg) => alert(msg));
     }
 
     // ===== POPULATE =====
@@ -146,26 +243,35 @@
     }
     function handleUpload(e) { handleFiles(e.target.files); e.target.value = ''; }
     async function handleFiles(files) {
-        if (!firebaseReady || !storage) { alert('Firebase no configurado. No se pueden subir fotos.'); return; }
+        if (!firebaseReady && !ghEnabled()) { alert('Falta configurar la nube (Firebase o GitHub). No se pueden subir fotos.'); return; }
         const title = $('uploadTitle').value || 'Onda Joven';
         const cat = $('uploadCategory').value;
         $('uploading').style.display = 'block';
         let ok = 0, errCount = 0;
         for (const file of files) {
             try {
-                const base = 'fotos/' + Date.now() + '-' + Math.random().toString(36).substring(2, 8);
+                const base = 'fotos/admin-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8);
                 const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
                 const thumbBlob = await makeThumb(file, 900, 0.82, 'image/jpeg');
-                await storage.ref(base + '-thumb.jpg').put(thumbBlob, { contentType: 'image/jpeg' });
-                const thumb = await storage.ref(base + '-thumb.jpg').getDownloadURL();
-                await storage.ref(base + '-original.' + ext).put(file);
-                const url = await storage.ref(base + '-original.' + ext).getDownloadURL();
-                await db.collection('photos').add({ url, thumb, title, category: cat, order: state.photos.length });
+                if (firebaseReady) {
+                    await storage.ref(base + '-thumb.jpg').put(thumbBlob, { contentType: 'image/jpeg' });
+                    const thumb = await storage.ref(base + '-thumb.jpg').getDownloadURL();
+                    await storage.ref(base + '-original.' + ext).put(file);
+                    const url = await storage.ref(base + '-original.' + ext).getDownloadURL();
+                    await db.collection('photos').add({ url, thumb, title, category: cat, order: state.photos.length });
+                } else {
+                    const t64 = await ghFileToB64(thumbBlob);
+                    const o64 = await ghFileToB64(file);
+                    await ghTimeout(ghWrite(base + '-thumb.jpg', t64, 'Subir foto: ' + title, null, false), 30000);
+                    await ghTimeout(ghWrite(base + '-original.' + ext, o64, 'Subir foto: ' + title, null, false), 30000);
+                    state.photos.push({ id: base, url: ghRaw(base + '-original.' + ext), thumb: ghRaw(base + '-thumb.jpg'), title, category: cat, order: state.photos.length });
+                }
                 ok++;
             } catch (e) { errCount++; console.error('Error subiendo foto:', e); $('photoStatus').textContent = 'Error: ' + e.message; }
         }
         $('uploading').style.display = 'none'; $('uploadTitle').value = '';
         $('photoStatus').textContent = ok > 0 ? ok + ' foto(s) subida(s)' : (errCount > 0 ? 'Error al subir.' : '');
+        if (!firebaseReady) { await saveConfig(); }
         await loadData();
     }
     function makeThumb(file, maxSize, quality, type) {
@@ -185,14 +291,31 @@
         });
     }
     async function deletePhoto(id) {
-        const photo = state.photos.find(p => p.id === id);
-        if (photo) { [photo.url, photo.thumb].forEach(function (d) { if (!d) return; try { const m = d.match(/\/o\/([^?]+)/); if (m) storage.ref(decodeURIComponent(m[1])).delete().catch(() => {}); } catch (e) {} }); }
-        try { await db.collection('photos').doc(id).delete(); } catch (e) {}
+        const idx = state.photos.findIndex(p => p.id === id);
+        if (idx < 0) { await loadData(); return; }
+        const photo = state.photos[idx];
+        state.photos.splice(idx, 1);
+        if (firebaseReady) {
+            [photo.url, photo.thumb].forEach(function (d) { if (!d) return; try { const m = d.match(/\/o\/([^?]+)/); if (m) storage.ref(decodeURIComponent(m[1])).delete().catch(() => {}); } catch (e) {} });
+            try { await db.collection('photos').doc(id).delete(); } catch (e) {}
+        }
+        if (!firebaseReady && ghEnabled()) {
+            const fromRaw = function (u) {
+                const pr = '/main/';
+                const i = String(u).indexOf(pr);
+                return i >= 0 ? String(u).slice(i + pr.length) : null;
+            };
+            for (const u of [photo.thumb, photo.url]) {
+                const p = fromRaw(u);
+                if (p) { try { await ghDelete(p); } catch (e) {} }
+            }
+            await saveConfig();
+        }
         await loadData(); alert('Foto eliminada');
     }
     function renderGalleryList() {
         const el = $('adminGalleryList'); if (!el) return;
-        el.innerHTML = state.photos.map(p => '<div class="list-item"><span><i class="fas fa-image"></i> ' + esc(p.title || 'Foto') + '</span><button class="btn-delete" onclick="OJAdmin.deletePhoto(\'' + p.id + '\')">Eliminar</button></div>').join('') || '<p style="color:var(--text-dim);font-size:.85rem">No hay fotos aún</p>';
+        el.innerHTML = state.photos.map(p => '<div class="list-item"><span><i class="fas fa-image"></i> ' + esc(p.title || 'Foto') + '</span><button class="btn-delete" onclick="OJAdmin.deletePhoto(\'' + (p.id || p.url) + '\')">Eliminar</button></div>').join('') || '<p style="color:var(--text-dim);font-size:.85rem">No hay fotos aún</p>';
     }
 
     // ===== REPERTORIO =====
@@ -202,11 +325,11 @@
         state.site.repertoire = state.site.repertoire || {};
         state.site.repertoire[cat] = state.site.repertoire[cat] || [];
         state.site.repertoire[cat].push({ name, artist: $('songArtist').value, duration: $('songDuration').value });
-        saveConfig().then(() => { ['songName', 'songArtist', 'songDuration'].forEach(i => $(i).value = ''); renderSongList(); $('songStatus').textContent = 'Canción agregada'; });
+        saveConfig().then((msg) => { ['songName', 'songArtist', 'songDuration'].forEach(i => $(i).value = ''); renderSongList(); $('songStatus').textContent = 'Canción agregada'; if (msg) alert(msg); });
     }
     function deleteSong(cat, index) {
         if (state.site.repertoire[cat]) state.site.repertoire[cat].splice(index, 1);
-        saveConfig().then(() => renderSongList());
+        saveConfig().then((msg) => { renderSongList(); if (msg) alert(msg); });
     }
     function renderSongList() {
         const el = $('adminSongList'); if (!el) return;
@@ -221,9 +344,9 @@
         const name = $('serviceName').value; if (!name) { alert('Escribe el nombre'); return; }
         state.site.services = state.site.services || [];
         state.site.services.push({ name, desc: $('serviceDesc').value, icon: $('serviceIcon').value || 'fa-star' });
-        saveConfig().then(() => { ['serviceName', 'serviceDesc', 'serviceIcon'].forEach(i => $(i).value = ''); renderServiceList(); $('serviceStatus').textContent = 'Servicio agregado'; });
+        saveConfig().then((msg) => { ['serviceName', 'serviceDesc', 'serviceIcon'].forEach(i => $(i).value = ''); renderServiceList(); $('serviceStatus').textContent = 'Servicio agregado'; if (msg) alert(msg); });
     }
-    function deleteService(index) { state.site.services.splice(index, 1); saveConfig().then(() => renderServiceList()); }
+    function deleteService(index) { state.site.services.splice(index, 1); saveConfig().then((msg) => { renderServiceList(); if (msg) alert(msg); }); }
     function renderServiceList() {
         const el = $('adminServiceList'); if (!el) return;
         const sv = state.site.services || [];
@@ -232,6 +355,7 @@
 
     // ===== LOGIN =====
     async function doLogin() {
+        saveGhToken();
         const pass = $('adminPasswordInput').value;
         $('loginError').textContent = '';
         if (!pass) { $('loginError').textContent = 'Ingresa la contraseña'; return; }
@@ -260,9 +384,10 @@
     });
 
     // ===== API PUBLICA =====
-    window.OJAdmin = { doLogin, logout, saveBasic, saveStory, saveSocial, saveContact, handleUpload, handleFiles, deletePhoto, addSong, deleteSong, addService, deleteService };
+    window.OJAdmin = { doLogin, logout, saveBasic, saveStory, saveSocial, saveContact, handleUpload, handleFiles, deletePhoto, addSong, deleteSong, addService, deleteService, saveGhToken };
 
     // ===== INICIO =====
+    try { const el = $('ghTokenInput'); if (el && localStorage.getItem('onaGhToken')) el.value = localStorage.getItem('onaGhToken'); } catch (e) {}
     if (getAuthed()) {
         state.authed = true;
         $('loginOverlay').classList.add('hidden');
