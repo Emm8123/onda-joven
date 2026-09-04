@@ -114,6 +114,18 @@
                     { name: 'Tu Sonrisa', artist: 'Elvis Crespo', duration: '3:45' },
                     { name: 'Mojito', artist: 'Tito El Bambino', duration: '3:30' },
                     { name: 'Dura', artist: 'Daddy Yankee', duration: '3:20' }
+                ],
+                brasileñas: [
+                    { name: 'Evidências', artist: 'Chitãozinho & Xororó', duration: '4:30' },
+                    { name: 'Foi Deus', artist: 'Chitãozinho & Xororó', duration: '3:50' },
+                    { name: 'No Rancho Fundo', artist: 'Chitãozinho & Xororó', duration: '4:15' },
+                    { name: 'Boate Azul', artist: 'Bruno & Marrone', duration: '3:30' },
+                    { name: 'Chora Me Liga', artist: 'Bruno & Marrone', duration: '3:45' },
+                    { name: 'Amore', artist: 'Bruno & Marrone', duration: '3:40' },
+                    { name: 'Meu Coração', artist: 'Leonardo', duration: '3:55' },
+                    { name: 'Diz Pra Mim', artist: 'Jorge & Mateus', duration: '3:20' },
+                    { name: 'Aquarela do Brasil', artist: 'Música Brasileña', duration: '3:50' },
+                    { name: 'Garota de Ipanema', artist: 'Tom Jobim', duration: '3:35' }
                 ]
             },
             stats: [
@@ -143,8 +155,8 @@
     };
 
     // ===== CATEGORIAS Y ETIQUETAS =====
-    const SONG_CATS = { paraguayas: 'Polkas y Guaranías', latinas: 'Cumbias y Salsa', merengues: 'Merengues', romanticas: 'Baladas', boleros: 'Boleros', mexicanas: 'Mexicanos y Corridos', internacional: 'Rock y Pop' };
-    const CAT_ICONS = { paraguayas: 'fa-flag', latinas: 'fa-drum', merengues: 'fa-bolt', romanticas: 'fa-heart', boleros: 'fa-music', mexicanas: 'fa-guitar', internacional: 'fa-globe', general: 'fa-star', concierto: 'fa-music', integradores: 'fa-users', eventos: 'fa-glass-cheers', promo: 'fa-camera' };
+    const SONG_CATS = { paraguayas: 'Polkas y Guaranías', latinas: 'Cumbias y Salsa', merengues: 'Merengues', romanticas: 'Baladas', boleros: 'Boleros', mexicanas: 'Mexicanos y Corridos', internacional: 'Rock y Pop', brasileñas: 'Sertanejo y Música Brasileña' };
+    const CAT_ICONS = { paraguayas: 'fa-flag', latinas: 'fa-drum', merengues: 'fa-bolt', romanticas: 'fa-heart', boleros: 'fa-music', mexicanas: 'fa-guitar', internacional: 'fa-globe', brasileñas: 'fa-earth-americas', general: 'fa-star', concierto: 'fa-music', integradores: 'fa-users', eventos: 'fa-glass-cheers', promo: 'fa-camera' };
     const CAT_LABELS = { general: 'General', concierto: 'Conciertos', integradores: 'Integrantes', eventos: 'Eventos', promo: 'Promocional' };
 
     // Utilidades para el panel de administracion (mismo contexto global)

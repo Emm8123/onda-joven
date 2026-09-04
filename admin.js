@@ -35,7 +35,7 @@
 
     // ===== CATEGORIAS =====
     const CAT_LABELS = { general: 'General', concierto: 'Conciertos', integradores: 'Integrantes', eventos: 'Eventos', promo: 'Promocional' };
-    const SONG_CATS = { paraguayas: 'Polkas y Guaranías', latinas: 'Cumbias y Salsa', merengues: 'Merengues', romanticas: 'Baladas', boleros: 'Boleros', mexicanas: 'Mexicanos y Corridos', internacional: 'Rock y Pop' };
+    const SONG_CATS = { paraguayas: 'Polkas y Guaranías', latinas: 'Cumbias y Salsa', merengues: 'Merengues', romanticas: 'Baladas', boleros: 'Boleros', mexicanas: 'Mexicanos y Corridos', internacional: 'Rock y Pop', brasileñas: 'Sertanejo y Música Brasileña' };
 
     // ===== ESTADO =====
     const state = {
@@ -60,7 +60,19 @@
             ],
             repertoire: {
                 paraguayas: [], latinas: [], merengues: [], romanticas: [],
-                boleros: [], mexicanas: [], internacional: []
+                boleros: [], mexicanas: [], internacional: [],
+                brasileñas: [
+                    { name: 'Evidências', artist: 'Chitãozinho & Xororó', duration: '4:30' },
+                    { name: 'Foi Deus', artist: 'Chitãozinho & Xororó', duration: '3:50' },
+                    { name: 'No Rancho Fundo', artist: 'Chitãozinho & Xororó', duration: '4:15' },
+                    { name: 'Boate Azul', artist: 'Bruno & Marrone', duration: '3:30' },
+                    { name: 'Chora Me Liga', artist: 'Bruno & Marrone', duration: '3:45' },
+                    { name: 'Amore', artist: 'Bruno & Marrone', duration: '3:40' },
+                    { name: 'Meu Coração', artist: 'Leonardo', duration: '3:55' },
+                    { name: 'Diz Pra Mim', artist: 'Jorge & Mateus', duration: '3:20' },
+                    { name: 'Aquarela do Brasil', artist: 'Música Brasileña', duration: '3:50' },
+                    { name: 'Garota de Ipanema', artist: 'Tom Jobim', duration: '3:35' }
+                ]
             },
             stats: []
         },
