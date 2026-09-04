@@ -12,7 +12,13 @@
     "phone": "0971 820 528",
     "whatsapp": "0971 820 528",
     "email": "",
-    "social": {},
+    "social": {
+      "facebook": "",
+      "instagram": "ONDAJOVENMUSIC ",
+      "youtube": "",
+      "spotify": "",
+      "tiktok": "Ondajoven "
+    },
     "services": [
       {
         "name": "Casamientos",
@@ -405,5 +411,5 @@
       "id": "fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg"
     }
   ],
-  "saved_at": "2026-09-04T20:40:49.990Z"
+  "saved_at": "2026-09-04T21:07:42.677Z"
 }
