@@ -248,12 +248,6 @@
         safe(renderServices);
         safe(renderContact);
         safe(renderMap);
-        safe(updateWaFloat);
-    }
-
-    function updateWaFloat() {
-        const f = $('waFloat');
-        if (f) f.href = waLink() + '?text=' + encodeURIComponent(waMessage());
     }
 
     function safe(fn) {
