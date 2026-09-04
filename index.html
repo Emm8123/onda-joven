@@ -176,10 +176,6 @@
         footer p{color:var(--text-dim);font-size:.85rem}
         footer .footer-logo{font-family:'Oswald',sans-serif;font-size:1.3rem;font-weight:600;color:var(--paper);margin-bottom:12px;display:inline-block;text-transform:uppercase;letter-spacing:4px}
 
-        /* ADMIN TOGGLE - SOLO BOTON */
-        .admin-toggle{position:fixed;bottom:30px;right:30px;z-index:900;width:56px;height:56px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border:1px solid rgba(201,162,39,.5);color:var(--paper);font-size:1.2rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;border-radius:50%;box-shadow:0 8px 24px var(--shadow);text-decoration:none}
-        .admin-toggle:hover{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#161008;transform:translateY(-3px);box-shadow:0 12px 30px var(--shadow)}
-
         /* ACCESIBILIDAD */
         :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -435,9 +431,6 @@
 
 <!-- Boton flotante de WhatsApp: consulta de contratacion -->
 <a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener" title="Contratar por WhatsApp"><i class="fab fa-whatsapp"></i></a>
-
-<!-- Boton admin: lleva a la pagina de administracion -->
-<a href="admin.html" class="admin-toggle" title="Panel de Administración" aria-label="Abrir panel de administración"><i class="fas fa-cog" aria-hidden="true"></i></a>
 
 <!-- FIREBASE MODULES (v9 compat via CDN) -->
 <script src="firebase-config.js"></script>

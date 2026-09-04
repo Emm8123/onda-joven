@@ -48,7 +48,16 @@
             hero: { subtitle: 'Banda Musical desde 1994', desc: 'Música en vivo para tus eventos.' },
             location: 'Curuguaty, Paraguay', map_query: '-24.4633671, -55.6907254',
             phone: '0971 820 528', whatsapp: '0971 820 528', email: '',
-            social: {}, services: [],
+            social: {}, services: [
+                { name: 'Casamientos', desc: 'La música perfecta para tu boda y recepción.', icon: 'fa-ring' },
+                { name: 'Bodas de Oro', desc: 'Celebración inolvidable para aniversarios.', icon: 'fa-heart' },
+                { name: 'Quinceañeras', desc: 'Ambienta el día más especial de tu 15 años.', icon: 'fa-crown' },
+                { name: 'Fiestas Patronales', desc: 'Vivamos juntos las fiestas de tu comunidad.', icon: 'fa-church' },
+                { name: 'Fiestas Privadas', desc: 'Cumpleaños y reuniones familiares con música en vivo.', icon: 'fa-glass-cheers' },
+                { name: 'Festivales', desc: 'Espectáculo completo para escenarios y festivales.', icon: 'fa-star' },
+                { name: 'Fiestas de Colación', desc: 'Cierra con broche de oro tu colación y graduación.', icon: 'fa-graduation-cap' },
+                { name: 'Eventos Empresariales', desc: 'Amenización profesional para tu empresa.', icon: 'fa-briefcase' }
+            ],
             repertoire: {
                 paraguayas: [], latinas: [], merengues: [], romanticas: [],
                 boleros: [], mexicanas: [], internacional: []

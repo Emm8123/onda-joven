@@ -51,7 +51,16 @@
             whatsapp: '0971 820 528',
             email: '',
             social: {},
-            services: [],
+            services: [
+                { name: 'Casamientos', desc: 'La música perfecta para tu boda y recepción.', icon: 'fa-ring' },
+                { name: 'Bodas de Oro', desc: 'Celebración inolvidable para aniversarios.', icon: 'fa-heart' },
+                { name: 'Quinceañeras', desc: 'Ambienta el día más especial de tu 15 años.', icon: 'fa-crown' },
+                { name: 'Fiestas Patronales', desc: 'Vivamos juntos las fiestas de tu comunidad.', icon: 'fa-church' },
+                { name: 'Fiestas Privadas', desc: 'Cumpleaños y reuniones familiares con música en vivo.', icon: 'fa-glass-cheers' },
+                { name: 'Festivales', desc: 'Espectáculo completo para escenarios y festivales.', icon: 'fa-star' },
+                { name: 'Fiestas de Colación', desc: 'Cierra con broche de oro tu colación y graduación.', icon: 'fa-graduation-cap' },
+                { name: 'Eventos Empresariales', desc: 'Amenización profesional para tu empresa.', icon: 'fa-briefcase' }
+            ],
             repertoire: {
                 paraguayas: [
                     { name: 'Pájaro Chogüí', artist: 'Popular Paraguaya', duration: '3:20' },
