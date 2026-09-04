@@ -1,7 +1,7 @@
 {
   "site": {
     "band_name": "Onda Joven",
-    "about": "Onda Joven se fundó el 21 de septiembre de 1994 en Curuguaty, Paraguay, bajo la dirección de los Hermanos Noguera. Desde entonces, con más de tres décadas de trayectoria, sigue poniendo a bailar los eventos de todo el Paraguay: sonido propio, luces, pantalla LED y boleta legal.",
+    "about": "Onda Joven se fundó el 21 de septiembre de 1994 en Curuguaty, Paraguay, bajo la dirección de los Hermanos Noguera. Desde entonces, con más de tres décadas de trayectoria, sigue poniendo a bailar los eventos de todo el Paraguay: sonido propio, luces y pantalla LED .\n\nEl grupo musical Onda Joven nació el 21 de septiembre de 1994 en Curuguaty, Paraguay, fundado por los Hermanos Noguera. Desde sus inicios, la música corría por las venas de la familia: Carlino Noguera en guitarra y voz, Virino Noguera en percusión y Alfirio Noguera en el teclado, quien además asumió la dirección musical. En el bajo, el Prof. Venancio Godoy acompañó al grupo durante décadas hasta el año 2025, cuando se integró Cristian Armin Noguera para continuar con la tradición familiar. Hoy Onda Joven está formada por cuatro integrantes, todos de la familia, y ofrece música en vivo con sonido propio, luces, pantalla LED y boleta legal, animando casamientos, quinceañeras, fiestas patronales, festivales y todo tipo de celebraciones en el Paraguay.\n\n\n",
     "history": "El grupo musical Onda Joven nació el 21 de septiembre de 1994 en Curuguaty, Paraguay, fundado por los Hermanos Noguera. Desde sus inicios, la música corría por las venas de la familia: Carlino Noguera en guitarra y voz, Virino Noguera en percusión y Alfirio Noguera en los teclados, quien además asumió la dirección musical.\n\nEn el bajo, el Prof. Venancio Godoy acompañó al grupo durante décadas hasta el año 2025, cuando se integró Cristian Armin Noguera para continuar con la tradición familiar.\n\nHoy Onda Joven está formada por cuatro integrantes, todos de la familia, y ofrece música en vivo con sonido propio, luces, pantalla LED y boleta legal, animando casamientos, quinceañeras, fiestas patronales, festivales y todo tipo de celebraciones en el Paraguay.",
     "hero": {
       "subtitle": "Grupo Musical desde 1994",
@@ -339,23 +339,20 @@
       "thumb": "fotos/thumbs/Integrantes.jpeg",
       "title": "Integrantes de Onda Joven",
       "category": "integradores",
-      "order": 0,
       "id": "fotos/Integrantes.jpeg"
     },
     {
-      "url": "fotos/Integrantes..jpeg",
-      "thumb": "fotos/thumbs/Integrantes..jpeg",
+      "url": "fotos/Integrantes...jpeg",
+      "thumb": "fotos/thumbs/Integrantes...jpeg",
       "title": "Integrantes",
       "category": "integradores",
-      "order": 1,
-      "id": "fotos/Integrantes..jpeg"
+      "id": "fotos/Integrantes...jpeg"
     },
     {
       "url": "fotos/Integrantes....jpeg",
       "thumb": "fotos/thumbs/Integrantes....jpeg",
       "title": "Integrantes",
       "category": "integradores",
-      "order": 3,
       "id": "fotos/Integrantes....jpeg"
     },
     {
@@ -363,7 +360,6 @@
       "thumb": "fotos/thumbs/Casamientos.jpeg",
       "title": "Casamientos",
       "category": "eventos",
-      "order": 4,
       "id": "fotos/Casamientos.jpeg"
     },
     {
@@ -371,7 +367,6 @@
       "thumb": "fotos/thumbs/Festivales.jpeg",
       "title": "Festivales",
       "category": "eventos",
-      "order": 5,
       "id": "fotos/Festivales.jpeg"
     },
     {
@@ -379,7 +374,6 @@
       "thumb": "fotos/thumbs/Fiesta de colaci%C3%B3n.jpeg",
       "title": "Fiesta de Colación",
       "category": "eventos",
-      "order": 6,
       "id": "fotos/Fiesta de colaci%C3%B3n.jpeg"
     },
     {
@@ -387,7 +381,6 @@
       "thumb": "fotos/thumbs/Fiesta de colaci%C3%B3n..jpeg",
       "title": "Fiesta de Colación",
       "category": "eventos",
-      "order": 7,
       "id": "fotos/Fiesta de colaci%C3%B3n..jpeg"
     },
     {
@@ -395,7 +388,6 @@
       "thumb": "fotos/thumbs/Fiestas%20patronales.jpeg",
       "title": "Fiestas Patronales",
       "category": "eventos",
-      "order": 8,
       "id": "fotos/Fiestas%20patronales.jpeg"
     },
     {
@@ -403,7 +395,6 @@
       "thumb": "fotos/thumbs/Fiestas%20privadas.jpeg",
       "title": "Fiestas Privadas",
       "category": "eventos",
-      "order": 9,
       "id": "fotos/Fiestas%20privadas.jpeg"
     },
     {
@@ -411,9 +402,8 @@
       "thumb": "fotos/thumbs/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg",
       "title": "Fiestas Privadas y Cumpleaños",
       "category": "eventos",
-      "order": 10,
       "id": "fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg"
     }
   ],
-  "saved_at": "2026-09-04T20:18:40.586Z"
+  "saved_at": "2026-09-04T20:22:22.964Z"
 }
