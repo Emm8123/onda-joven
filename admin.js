@@ -246,7 +246,9 @@
     }
     function logout() {
         state.authed = false; clearAuthed();
-        if (firebase.auth && firebase.auth().currentUser) firebase.auth().signOut().catch(() => {});
+        if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
+            try { firebase.auth().signOut().catch(() => {}); } catch (e) {}
+        }
         $('adminPanel').classList.remove('active');
         $('loginOverlay').classList.remove('hidden');
         $('adminPasswordInput').value = '';
