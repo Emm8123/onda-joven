@@ -340,6 +340,13 @@
         const cp = $('contactPhone');
         if (cp) cp.textContent = s.phone || '--';
 
+        // Boton flotante de WhatsApp (mismo numero y mensaje que la tarjeta)
+        const wf = $('waFloat');
+        if (wf) {
+            const wa = waLink();
+            wf.setAttribute('href', (s.phone && wa && wa !== '#') ? (wa + '?text=' + encodeURIComponent(waMessage())) : '#');
+        }
+
         const social = s.social || {};
         const links = [
             { key: 'facebook', icon: 'fab fa-facebook-f', t: 'Facebook' },
