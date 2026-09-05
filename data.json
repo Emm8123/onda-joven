@@ -11,7 +11,13 @@
     "phone": "0971 820 528",
     "whatsapp": "0971 820 528",
     "email": "",
-    "social": {},
+    "social": {
+      "facebook": "Facebook",
+      "instagram": "",
+      "youtube": "",
+      "spotify": "",
+      "tiktok": ""
+    },
     "services": [
       {
         "name": "Casamientos",
@@ -404,5 +410,5 @@
       "id": "fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg"
     }
   ],
-  "saved_at": "2026-09-05T12:38:42.367Z"
+  "saved_at": "2026-09-05T13:25:57.067Z"
 }
