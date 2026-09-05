@@ -271,7 +271,7 @@
             if (empty) empty.style.display = 'none';
             grid.innerHTML = items.map((p, i) =>
                 '<div class="gallery-item reveal" onclick="OJ.openLightbox(' + i + ')">' +
-                    '<img src="' + esc(thumbUrl(p)) + '" alt="' + esc(p.title || 'Onda Joven') + '" loading="lazy" decoding="async" fetchpriority="low" onerror="this.parentElement.parentElement.style.display=\'none\'">' +
+                    '<img src="' + esc(thumbUrl(p)) + '" data-url="' + esc((p && p.url) || '') + '" alt="' + esc(p.title || 'Onda Joven') + '" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.getAttribute(\'data-fb\')!==\'1\' && this.getAttribute(\'data-url\')){this.setAttribute(\'data-fb\',\'1\');this.src=this.getAttribute(\'data-url\');}else{this.parentElement.style.display=\'none\';}">' +
                     '<div class="gallery-overlay"><h4>' + esc(p.title || 'Onda Joven') + '</h4><p>' + esc(CAT_LABELS[p.category] || p.category) + '</p></div>' +
                 '</div>'
             ).join('');
@@ -408,10 +408,15 @@
     }
 
     function observeReveal() {
+        const els = document.querySelectorAll('.reveal:not(.visible)');
+        if (!('IntersectionObserver' in window)) {
+            els.forEach(function (el) { el.classList.add('visible'); });
+            return;
+        }
         const obs = new IntersectionObserver(function (entries) {
             entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
         }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal:not(.visible)').forEach(function (el) { obs.observe(el); });
+        els.forEach(function (el) { obs.observe(el); });
     }
 
     function sendContact(e) {
