@@ -145,11 +145,17 @@
         /* CONTACTO */
         .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;max-width:1000px;margin:0 auto}
         .contact-info{display:flex;flex-direction:column;gap:14px}
-        .contact-item{display:flex;align-items:center;gap:16px;padding:18px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;transition:all .3s;backdrop-filter:blur(6px)}
+        .contact-item{display:flex;align-items:center;gap:16px;padding:18px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;transition:all .3s;backdrop-filter:blur(6px);text-decoration:none;color:inherit}
         .contact-item:hover{border-color:rgba(201,162,39,.3)}
         .contact-icon{width:46px;height:46px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));display:flex;align-items:center;justify-content:center;color:var(--paper);font-size:1rem;flex-shrink:0;border-radius:50%}
-        .contact-item h4{font-size:.95rem;margin-bottom:2px;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:1px}
+        .contact-item h4{font-size:.95rem;margin-bottom:2px;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:1px;transition:color .3s}
         .contact-item p{font-size:.9rem;color:var(--text-dim)}
+        .contact-item.whatsapp{border:1px solid rgba(37,211,102,.35);background:rgba(37,211,102,.05);cursor:pointer}
+        .contact-item.whatsapp:hover{border-color:#25D366;background:rgba(37,211,102,.12);box-shadow:0 0 34px rgba(37,211,102,.28);transform:translateY(-2px)}
+        .contact-item.whatsapp h4{color:#25D366}
+        .contact-item.whatsapp p{color:var(--text);font-size:1.15rem;font-weight:600}
+        .contact-icon.wa{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;font-size:1.25rem;box-shadow:0 6px 18px rgba(37,211,102,.35)}
+        .contact-wa-badge{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:4px 12px;background:rgba(37,211,102,.15);color:#25D366;border-radius:20px;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;font-family:'Oswald',sans-serif}
         .social-links{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
         .social-link{width:46px;height:46px;border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:1.1rem;transition:all .3s;text-decoration:none;background:var(--glass);border-radius:50%;backdrop-filter:blur(4px)}
         .social-link:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-3px);background:rgba(201,162,39,.06)}
@@ -260,7 +266,7 @@
         <h1 class="hero-title"><span id="heroTitle">ONDA JOVEN</span></h1>
         <p class="hero-desc" id="heroDesc">Música en vivo para tus eventos: sonido propio, luces y pantalla LED. Boleta legal.</p>
         <div class="hero-buttons">
-            <a href="#contact" class="btn btn-primary"><i class="fas fa-envelope"></i> Contratar</a>
+            <a href="#contact" class="btn btn-primary"><i class="fab fa-whatsapp"></i> Contratar</a>
             <a href="#repertoire" class="btn btn-outline"><i class="fas fa-music"></i> Repertorio</a>
         </div>
     </div>
@@ -355,14 +361,14 @@
                 <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
                 <div><h4>Ubicación</h4><p id="contactLocation">Paraguay</p></div>
             </div>
-            <div class="contact-item">
-                <div class="contact-icon"><i class="fas fa-phone"></i></div>
-                <div><h4>Contratos</h4><p id="contactPhone">0971 820 528</p></div>
-            </div>
-            <div class="contact-item">
-                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-                <div><h4>Email</h4><p id="contactEmail">--</p></div>
-            </div>
+            <a class="contact-item whatsapp" id="waCard" href="#" target="_blank" rel="noopener" title="Abrir chat de WhatsApp">
+                <div class="contact-icon wa"><i class="fab fa-whatsapp"></i></div>
+                <div>
+                    <h4>WhatsApp</h4>
+                    <p id="contactPhone">0971 820 528</p>
+                    <span class="contact-wa-badge"><i class="fas fa-bolt"></i> Respondemos rápido</span>
+                </div>
+            </a>
             <div class="social-links" id="socialLinks"></div>
         </div>
         <form class="contact-form reveal" onsubmit="OJ.sendContact(event)">
@@ -408,8 +414,8 @@
                 <label>Mensaje</label>
                 <textarea placeholder="Cuéntanos sobre tu evento..."></textarea>
             </div>
-            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center"><i class="fas fa-paper-plane"></i> Enviar Consulta</button>
-            <p class="form-note" style="text-align:center;font-size:1rem">Para contrataciones llámenos al <strong style="color:var(--accent)">0971 820 528</strong></p>
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center"><i class="fab fa-whatsapp"></i> Enviar por WhatsApp</button>
+            <p class="form-note" style="text-align:center;font-size:1rem">Para contrataciones, escríbenos al <strong style="color:#25D366">0971 820 528 <i class="fab fa-whatsapp"></i></strong></p>
         </form>
     </div>
 </section>

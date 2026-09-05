@@ -330,15 +330,15 @@
         const s = state.site;
         const cl = $('contactLocation'); if (cl && s.location) cl.textContent = s.location;
 
-        // Telefono con enlace a WhatsApp (abre chat con mensaje de consulta)
-        const cp = $('contactPhone');
-        if (cp && s.phone) cp.innerHTML = '<a href="' + waLink() + '?text=' + encodeURIComponent(waMessage()) + '" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">' + esc(s.phone) + ' <i class="fab fa-whatsapp" style="font-size:1.2rem;vertical-align:middle"></i></a>';
-
-        const ce = $('contactEmail');
-        if (ce) {
-            if (s.email) { ce.innerHTML = '<a href="mailto:' + esc(s.email) + '" style="color:var(--accent);text-decoration:none">' + esc(s.email) + '</a>'; }
-            else { ce.textContent = '--'; }
+        // Tarjeta de WhatsApp: en general clicable con el numero y chat directo
+        const wc = $('waCard');
+        if (wc) {
+            const wa = waLink();
+            wc.setAttribute('href', (s.phone && wa && wa !== '#') ? (wa + '?text=' + encodeURIComponent(waMessage())) : '#');
+            wc.setAttribute('title', 'Abrir chat de WhatsApp');
         }
+        const cp = $('contactPhone');
+        if (cp) cp.textContent = s.phone || '--';
 
         const social = s.social || {};
         const links = [
