@@ -131,6 +131,11 @@
         .gallery-item:hover .gallery-overlay{opacity:1}
         .gallery-overlay h4{font-size:1.05rem;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:1px}
         .gallery-overlay p{font-size:.8rem;color:var(--accent);font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:2px}
+        @media (hover:none),(pointer:coarse){
+            .gallery-overlay{opacity:1;background:linear-gradient(transparent 30%,rgba(15,13,10,.92))}
+            .gallery-item:hover{transform:none}
+            .gallery-item:hover img{transform:none}
+        }
         .empty-gallery{text-align:center;color:var(--text-dim);font-size:1.1rem;padding:60px 20px;border:2px dashed var(--glass-border);border-radius:14px;max-width:600px;margin:0 auto}
 
         /* LIGHTBOX */
