@@ -93,7 +93,9 @@
         });
     }
     function ghPublish() {
-        const body = { site: state.site, photos: state.photos, saved_at: new Date().toISOString() };
+        const siteOut = Object.assign({}, state.site);
+        delete siteOut.about;
+        const body = { site: siteOut, photos: state.photos, saved_at: new Date().toISOString() };
         const b64 = ghB64(JSON.stringify(body, null, 2));
         return ghGet('data.json').then(function (existing) {
             return ghWrite('data.json', b64, 'Actualizar contenido de Onda Joven', existing ? existing.sha : null, false)
