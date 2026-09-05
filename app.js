@@ -119,19 +119,28 @@
         // completos. El respaldo local ya NO se autoaplica: un respaldo
         // viejo/podado no puede volver a borrar el contenido.
         if (!firebaseReady) {
-            try {
-                const r = await fetch('data.json?v=' + Date.now(), { cache: 'no-store' });
-                if (r.ok) {
+            // Lectura en orden: 1) GitHub raw (actualizado en SEGUNDOS tras el
+            // guardado) -> 2) data.json local/Pages (respaldo lento).
+            const gd = (window.GITHUB_OWNER && window.GITHUB_REPO)
+                ? 'https://github.com/' + window.GITHUB_OWNER + '/' + window.GITHUB_REPO + '/raw/main/data.json?v=' + Date.now()
+                : null;
+            const candidates = [gd, 'data.json?v=' + Date.now()].filter(Boolean);
+            let ok = false;
+            for (const url of candidates) {
+                try {
+                    const r = await fetch(url, { cache: 'no-store' });
+                    if (!r.ok) continue;
                     const d = await r.json();
                     const c = (d && d.site) ? d.site : (d || {});
                     state.site = mergeSite(state.site, c, false);
                     if (d && Array.isArray(d.photos)) {
                         state.photos = d.photos.map(p => Object.assign({}, p, { id: p.id || p.url }));
                     }
-                }
-            } catch (e) {
-                console.warn('No se pudo leer data.json:', e);
+                    ok = true;
+                    break;
+                } catch (e) { }
             }
+            if (!ok) console.warn('No se pudo leer data.json publicado; se usan los defaults completos.');
             state.filteredPhotos = state.photos.slice();
         }
         if (firebaseReady) {

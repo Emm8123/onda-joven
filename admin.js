@@ -145,17 +145,22 @@
         // se pisa con la ultima edicion local de este navegador (sin borrar
         // contenido con listas vacias).
         if (!firebaseReady && ghEnabled()) {
-            try {
-                const r = await fetch('data.json?v=' + Date.now(), { cache: 'no-store' });
-                if (r.ok) {
+            // Lectura en orden: 1) GitHub raw (actualizado en SEGUNDOS)
+            // -> 2) data.json local/Pages (respaldo lento).
+            const gd = 'https://github.com/' + window.GITHUB_OWNER + '/' + window.GITHUB_REPO + '/raw/main/data.json?v=' + Date.now();
+            for (const url of [gd, 'data.json?v=' + Date.now()]) {
+                try {
+                    const r = await fetch(url, { cache: 'no-store' });
+                    if (!r.ok) continue;
                     const d = await r.json();
                     const cloud = (d && d.site) ? d.site : {};
                     state.site = mergeSite(state.site, cloud, false);
                     if (d && Array.isArray(d.photos)) {
                         state.photos = d.photos.map(p => Object.assign({}, p, { id: p.id || p.url }));
                     }
-                }
-            } catch (e) { }
+                    break;
+                } catch (e) { }
+            }
         }
         // NOTA: el respaldo local ya no se autoaplica. El contenido es lo
         // PUBLICADO (data.json) o los defaults completos; asi un respaldo
