@@ -58,6 +58,8 @@
         .list-item{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--glass-border);font-size:.88rem}
         .list-item:last-child{border:none}
         .status{color:#7fd89a;font-size:.88rem;min-height:20px;margin-top:10px}
+        .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:#1f3a2a;border:1px solid #25D366;color:#eaffea;padding:12px 22px;border-radius:30px;font-family:'Oswald',sans-serif;letter-spacing:.5px;font-size:.9rem;z-index:999;opacity:0;visibility:hidden;transition:all .3s;box-shadow:0 10px 30px rgba(0,0,0,.5);max-width:90%;text-align:center;pointer-events:none}
+        .toast.show{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
         .btn-logout{margin-top:24px;background:rgba(139,31,44,.08);border:1px solid var(--glass-border);color:var(--text-dim);padding:12px;width:100%;cursor:pointer;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:1.5px;border-radius:10px;transition:all .25s;min-height:44px}
         .btn-logout:hover{border-color:rgba(224,123,138,.5);color:#e07b8a}
         @media(max-width:600px){.form-row{grid-template-columns:1fr}.panel{padding:16px}}
@@ -77,6 +79,8 @@
         <button class="btn-login" onclick="OJAdmin.doLogin()">Entrar</button>
     </div>
 </div>
+
+<div class="toast" id="adminToast" role="status"></div>
 
 <!-- PANEL -->
 <div class="panel" id="adminPanel">
@@ -120,6 +124,16 @@
         </div>
         <div class="list" id="adminGalleryList" style="margin-top:8px"></div>
         <div class="status" id="photoStatus"></div>
+    </div>
+
+    <div class="section">
+        <h2><i class="fab fa-youtube"></i> Videos (YouTube)</h2>
+        <p style="color:var(--text-dim);font-size:.85rem;margin-bottom:12px">Pegá el link de un video de YouTube (público o "no listado"). Se muestra en la página sin salir de ella.</p>
+        <div class="form-group"><label for="videoUrl">Link de YouTube</label><input type="text" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..."></div>
+        <div class="form-group"><label for="videoTitle">Título</label><input type="text" id="videoTitle" placeholder="Ej: Onda Joven - Bailable 2026"></div>
+        <button class="btn-add" onclick="OJAdmin.addVideo()">+ Agregar Video</button>
+        <div class="list" id="adminVideoList" style="margin-top:8px"></div>
+        <div class="status" id="videoStatus"></div>
     </div>
 
     <div class="section">

@@ -141,7 +141,14 @@
         }
         if (Array.isArray(over.services) && (!protectEmpty || over.services.length > 0)) out.services = over.services.slice();
         if (Array.isArray(over.stats) && (!protectEmpty || over.stats.length > 0)) out.stats = over.stats.slice();
+        if (Array.isArray(over.videos)) out.videos = over.videos.slice();
         return out;
+    }
+    // Extrae el ID de un link de YouTube (watch, youtu.be, embed, shorts, live)
+    function ytId(url) {
+        const s = String(url || '');
+        const m = s.match(/(?:youtube\.com\/(?:watch\?.*(?:^|[?&])v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{6,})/);
+        return m ? m[1] : '';
     }
 
     // ===== CARGAR DATOS =====
@@ -183,24 +190,41 @@
     }
 
     // ===== SAVE (nunca debe colgarse; responde siempre con un mensaje) =====
+    // Aviso suave tipo "toast": no bloquea y no se pierde.
+    let toastTimer = null;
+    function toast(msg) {
+        const t = $('adminToast');
+        if (!t) { alert(msg); return; }
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { t.classList.remove('show'); }, 4000);
+    }
+    // Guarda de guardados: si una publicacion sigue en curso, no se lanza otra
+    // (evita commits dobles e "Accepted" que confundan al usuario).
+    let busy = false;
     function saveConfig() {
+        if (busy) { toast('Ya se está guardando… esperá un momento'); return Promise.resolve(''); }
+        busy = true;
+        let done = false;
+        const finish = function (msg) { busy = false; return msg; };
         const local = Object.assign({}, state.site, { photos: state.photos });
         try { localStorage.setItem('onaSiteBackup', JSON.stringify(local)); } catch (e) {}
         return new Promise(function (resolve) {
             if (firebaseReady && state.firebaseWritable !== false) {
-                const timer = setTimeout(function () { console.warn('Timeout Firestore: se guardo solo local.'); resolve('Guardado (solo este navegador: sin conexión con Firebase)'); }, 4000);
+                const timer = setTimeout(function () { console.warn('Timeout Firestore: se guardo solo local.'); resolve(finish('Guardado (solo este navegador: sin conexión con Firebase)')); }, 4000);
                 CONFIG_DOC.set(state.site, { merge: true })
-                    .then(function () { clearTimeout(timer); resolve('Guardado'); })
-                    .catch(function (e) { clearTimeout(timer); console.error('Error guardando:', e); state.firebaseWritable = false; resolve('Guardado (solo este navegador: no se pudo conectar)'); });
+                    .then(function () { clearTimeout(timer); resolve(finish('Guardado')); })
+                    .catch(function (e) { clearTimeout(timer); console.error('Error guardando:', e); state.firebaseWritable = false; resolve(finish('Guardado (solo este navegador: no se pudo conectar)')); });
                 return;
             }
             if (ghEnabled()) {
                 ghTimeout(ghPublish(), 25000)
-                    .then(function () { resolve('Guardado y publicado. Ya se actualiza para todos: recargá la página (Ctrl+F5).'); })
-                    .catch(function (e) { console.error('Error publicando en GitHub:', e); resolve('Guardado en este navegador. No se pudo publicar: ' + e.message + '. Revisa la conexión y vuelve a guardar.'); });
+                    .then(function () { resolve(finish('Guardado y publicado. Ya se actualiza para todos (Ctrl+F5).')); })
+                    .catch(function (e) { console.error('Error publicando en GitHub:', e); resolve(finish('Guardado en este navegador. No se pudo publicar: ' + (e && e.message || 'error') + '. Revisá el token y volvé a guardar.')); });
                 return;
             }
-            resolve('Guardado (solo este navegador: falta configurar la nube)');
+            resolve(finish('Guardado (solo este navegador: falta configurar la nube)'));
         });
     }
     function saveBasic() {
@@ -208,17 +232,22 @@
         state.site.hero = state.site.hero || {};
         state.site.hero.subtitle = $('aHeroSubtitle').value;
         state.site.hero.desc = $('aHeroDesc').value;
-        saveConfig().then((msg) => { alert(msg); }).catch(e => { alert('Error: ' + e.message); });
+        saveConfig().then(msg => { if (msg) toast(msg); renderBasic(); }).catch(e => toast('Error: ' + e.message));
     }
-    function saveStory() { state.site.history = $('aAbout').value; saveConfig().then((msg) => alert(msg)); }
+    function saveStory() { state.site.history = $('aAbout').value; saveConfig().then(msg => { if (msg) toast(msg); }).catch(e => toast('Error: ' + e.message)); }
     function saveSocial() {
         state.site.social = { facebook: $('aSocialFb').value, instagram: $('aSocialIg').value, youtube: $('aSocialYt').value, spotify: $('aSocialSp').value, tiktok: $('aSocialTk').value };
-        saveConfig().then((msg) => alert(msg));
+        saveConfig().then(msg => { if (msg) toast(msg); }).catch(e => toast('Error: ' + e.message));
     }
     function saveContact() {
         state.site.location = $('aLocation').value; state.site.map_query = $('aMapQuery').value;
         state.site.phone = $('aPhone').value; state.site.whatsapp = $('aWhatsapp').value; state.site.email = $('aEmail').value;
-        saveConfig().then((msg) => alert(msg));
+        saveConfig().then(msg => { if (msg) toast(msg); }).catch(e => toast('Error: ' + e.message));
+    }
+    function renderBasic() {
+        const s = state.site;
+        const vars = { aBandName: s.band_name, aHeroSubtitle: (s.hero && s.hero.subtitle), aHeroDesc: (s.hero && s.hero.desc), aLocation: s.location, aMapQuery: s.map_query, aPhone: s.phone, aWhatsapp: s.whatsapp, aEmail: s.email, aAbout: s.history || s.about };
+        Object.keys(vars).forEach(id => { const el = $(id); if (el) el.value = vars[id] || ''; });
     }
 
     // ===== POPULATE =====
@@ -229,7 +258,7 @@
         const soc = s.social || {};
         const so = { aSocialFb: 'facebook', aSocialIg: 'instagram', aSocialYt: 'youtube', aSocialSp: 'spotify', aSocialTk: 'tiktok' };
         Object.keys(so).forEach(id => { const el = $(id); if (el) el.value = soc[so[id]] || ''; });
-        renderSongList(); renderServiceList(); renderGalleryList();
+        renderSongList(); renderServiceList(); renderGalleryList(); renderVideoList();
     }
 
     // ===== FOTOS =====
@@ -241,7 +270,7 @@
     }
     function handleUpload(e) { handleFiles(e.target.files); e.target.value = ''; }
     async function handleFiles(files) {
-        if (!firebaseReady && !ghEnabled()) { alert('Falta configurar la nube (Firebase o GitHub). No se pueden subir fotos.'); return; }
+        if (!firebaseReady && !ghEnabled()) { toast('Falta configurar la nube (Firebase o GitHub). No se pueden subir fotos.'); return; }
         const title = $('uploadTitle').value || 'Onda Joven';
         const cat = $('uploadCategory').value;
         $('uploading').style.display = 'block';
@@ -309,7 +338,7 @@
             }
             await saveConfig();
         }
-        await loadData(); alert('Foto eliminada');
+        await loadData(); toast('Foto eliminada');
     }
     function renderGalleryList() {
         const el = $('adminGalleryList'); if (!el) return;
@@ -318,16 +347,16 @@
 
     // ===== REPERTORIO =====
     function addSong() {
-        const name = $('songName').value; if (!name) { alert('Escribe el nombre'); return; }
+        const name = $('songName').value; if (!name) { toast('Escribe el nombre'); return; }
         const cat = $('songCategory').value;
         state.site.repertoire = state.site.repertoire || {};
         state.site.repertoire[cat] = state.site.repertoire[cat] || [];
         state.site.repertoire[cat].push({ name, artist: $('songArtist').value, duration: $('songDuration').value });
-        saveConfig().then((msg) => { ['songName', 'songArtist', 'songDuration'].forEach(i => $(i).value = ''); renderSongList(); $('songStatus').textContent = 'Canción agregada'; if (msg) alert(msg); });
+        saveConfig().then((msg) => { ['songName', 'songArtist', 'songDuration'].forEach(i => $(i).value = ''); renderSongList(); toast('Canción agregada'); if (msg) toast(msg); });
     }
     function deleteSong(cat, index) {
         if (state.site.repertoire[cat]) state.site.repertoire[cat].splice(index, 1);
-        saveConfig().then((msg) => { renderSongList(); if (msg) alert(msg); });
+        saveConfig().then((msg) => { renderSongList(); if (msg) toast(msg); });
     }
     function renderSongList() {
         const el = $('adminSongList'); if (!el) return;
@@ -339,16 +368,38 @@
 
     // ===== SERVICIOS =====
     function addService() {
-        const name = $('serviceName').value; if (!name) { alert('Escribe el nombre'); return; }
+        const name = $('serviceName').value; if (!name) { toast('Escribe el nombre'); return; }
         state.site.services = state.site.services || [];
         state.site.services.push({ name, desc: $('serviceDesc').value, icon: $('serviceIcon').value || 'fa-star' });
-        saveConfig().then((msg) => { ['serviceName', 'serviceDesc', 'serviceIcon'].forEach(i => $(i).value = ''); renderServiceList(); $('serviceStatus').textContent = 'Servicio agregado'; if (msg) alert(msg); });
+        saveConfig().then((msg) => { ['serviceName', 'serviceDesc', 'serviceIcon'].forEach(i => $(i).value = ''); renderServiceList(); toast('Servicio agregado'); if (msg) toast(msg); });
     }
-    function deleteService(index) { state.site.services.splice(index, 1); saveConfig().then((msg) => { renderServiceList(); if (msg) alert(msg); }); }
+    function deleteService(index) { state.site.services.splice(index, 1); saveConfig().then((msg) => { renderServiceList(); if (msg) toast(msg); }); }
     function renderServiceList() {
         const el = $('adminServiceList'); if (!el) return;
         const sv = state.site.services || [];
         el.innerHTML = sv.map((s, i) => '<div class="list-item"><span>' + esc(s.name) + '</span><button class="btn-delete" onclick="OJAdmin.deleteService(' + i + ')">Eliminar</button></div>').join('') || '<p style="color:var(--text-dim);font-size:.85rem">No hay servicios</p>';
+    }
+
+    // ===== VIDEOS =====
+    function addVideo() {
+        const url = $('videoUrl').value.trim(); if (!url) { toast('Pegá primero el link de YouTube'); return; }
+        if (!ytId(url)) { toast('Ese link no parece de YouTube. Copialo de la barra del navegador.'); return; }
+        state.site.videos = state.site.videos || [];
+        state.site.videos.push({ url, title: $('videoTitle').value.trim() || 'Mira a Onda Joven en acción' });
+        saveConfig().then(msg => {
+            $('videoUrl').value = ''; $('videoTitle').value = '';
+            renderVideoList(); toast('Video agregado'); if (msg) toast(msg);
+        }).catch(e => toast('Error: ' + e.message));
+    }
+    function deleteVideo(index) {
+        state.site.videos = state.site.videos || [];
+        state.site.videos.splice(index, 1);
+        saveConfig().then(msg => { renderVideoList(); if (msg) toast(msg); }).catch(e => toast('Error: ' + e.message));
+    }
+    function renderVideoList() {
+        const el = $('adminVideoList'); if (!el) return;
+        const vids = state.site.videos || [];
+        el.innerHTML = vids.map((v, i) => '<div class="list-item"><span><i class="fab fa-youtube"></i> ' + esc(v.title || v.url) + '</span><button class="btn-delete" onclick="OJAdmin.deleteVideo(' + i + ')">Eliminar</button></div>').join('') || '<p style="color:var(--text-dim);font-size:.85rem">No hay videos aún</p>';
     }
 
     // ===== LOGIN =====
@@ -382,10 +433,13 @@
     });
 
     // ===== API PUBLICA =====
-    window.OJAdmin = { doLogin, logout, saveBasic, saveStory, saveSocial, saveContact, handleUpload, handleFiles, deletePhoto, addSong, deleteSong, addService, deleteService, saveGhToken };
+    window.OJAdmin = { doLogin, logout, saveBasic, saveStory, saveSocial, saveContact, handleUpload, handleFiles, deletePhoto, addSong, deleteSong, addService, deleteService, addVideo, deleteVideo, saveGhToken };
 
     // ===== INICIO =====
     try { const el = $('ghTokenInput'); if (el && localStorage.getItem('onaGhToken')) el.value = localStorage.getItem('onaGhToken'); } catch (e) {}
+    // El panel arranca SIEMPRE con contenido (defaults) aunque la nube tarde
+    // o falle: nunca queda en blanco ni "trabado".
+    try { populate(); } catch (e) { console.error('Error inicial:', e); }
     if (getAuthed()) {
         state.authed = true;
         $('loginOverlay').classList.add('hidden');

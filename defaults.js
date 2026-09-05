@@ -14,6 +14,7 @@ window.OJ_DEFAULTS = {
         phone: '0971 820 528',
         whatsapp: '0971 820 528',
         email: '',
+        videos: [],
         social: {},
         services: [
             { name: 'Casamientos', desc: 'La música perfecta para tu boda y recepción.', icon: 'fa-ring' },

@@ -111,7 +111,14 @@
         }
         if (Array.isArray(over.services) && (!protectEmpty || over.services.length > 0)) out.services = over.services.slice();
         if (Array.isArray(over.stats) && (!protectEmpty || over.stats.length > 0)) out.stats = over.stats.slice();
+        if (Array.isArray(over.videos)) out.videos = over.videos.slice();
         return out;
+    }
+    // Extrae el ID de un link de YouTube (watch, youtu.be, embed, shorts, live)
+    function ytId(url) {
+        const s = String(url || '');
+        const m = s.match(/(?:youtube\.com\/(?:watch\?.*(?:^|[?&])v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{6,})/);
+        return m ? m[1] : '';
     }
     // Decodifica base64 (con acentos) a texto.
     function b64ToStr(b64) {
@@ -183,6 +190,7 @@
     function renderAll() {
         safe(renderBrand);
         safe(renderAbout);
+        safe(renderVideos);
         safe(renderGallery);
         safe(renderRepertoire);
         safe(renderServices);
@@ -214,6 +222,22 @@
                 aboutImg.src = 'logo.jpeg';
             }
         }
+    }
+
+    function renderVideos() {
+        const sec = $('videos');
+        const grid = $('videosGrid');
+        if (!sec || !grid) return;
+        const vids = (state.site.videos || []).filter(v => ytId(v && v.url));
+        if (!vids.length) { sec.style.display = 'none'; return; }
+        sec.style.display = 'block';
+        grid.innerHTML = vids.map(v => {
+            const id = ytId(v.url);
+            const t = esc(v.title || 'Mira a Onda Joven en acción');
+            return '<div class="video-item"><iframe src="https://www.youtube.com/embed/' + id + '" title="' + t + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe><h4>' + t + '</h4></div>';
+        }).join('');
+        const tl = $('videosTitle');
+        if (tl) tl.textContent = 'Mirá a Onda Joven en acción';
     }
 
     function renderAbout() {
@@ -346,6 +370,9 @@
         }
         const cp = $('contactPhone');
         if (cp) cp.textContent = s.phone || '--';
+
+        const fp = $('formPhone');
+        if (fp) fp.textContent = s.phone || '';
 
         // Boton flotante de WhatsApp (mismo numero y mensaje que la tarjeta)
         const wf = $('waFloat');

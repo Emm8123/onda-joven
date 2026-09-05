@@ -110,6 +110,14 @@
         .stat-number{font-family:'Anton',sans-serif;font-size:2rem;color:var(--accent)}
         .stat-label{font-size:.85rem;color:var(--text-dim);letter-spacing:1px;margin-top:4px;font-family:'Oswald',sans-serif;text-transform:uppercase}
 
+        /* VIDEOS */
+        .videos{padding:100px 20px}
+        .video-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1100px;margin:0 auto}
+        .video-item{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.4)}
+        .video-item iframe{width:100%;aspect-ratio:16/9;border:0;display:block}
+        .video-item h4{padding:12px 16px;font-family:'Oswald',sans-serif;color:var(--accent);text-transform:uppercase;letter-spacing:1px;font-size:.95rem}
+        @media(max-width:800px){.video-grid{grid-template-columns:1fr}}
+
         /* GALERIA */
         .gallery-filter{display:flex;justify-content:center;gap:10px;margin-bottom:40px;flex-wrap:wrap}
         .filter-btn{padding:8px 22px;border:1px solid var(--glass-border);background:var(--glass);color:var(--text-dim);cursor:pointer;font-family:'Oswald',sans-serif;font-size:.85rem;text-transform:uppercase;letter-spacing:2px;transition:all .3s;border-radius:20px;backdrop-filter:blur(4px)}
@@ -304,6 +312,15 @@
     </div>
 </section>
 
+<section class="videos" id="videos" style="display:none">
+    <div class="section-header">
+        <p class="section-tag reveal">En Vivo</p>
+        <h2 class="section-title reveal"><span id="videosTitle">Mirá a Onda Joven en acción</span></h2>
+        <div class="section-line reveal"></div>
+    </div>
+    <div class="video-grid reveal" id="videosGrid"></div>
+</section>
+
 <section class="gallery" id="gallery">
     <div class="section-header">
         <p class="section-tag reveal">Momentos</p>
@@ -426,7 +443,7 @@
                 <textarea placeholder="Cuéntanos sobre tu evento..."></textarea>
             </div>
             <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center"><i class="fab fa-whatsapp"></i> Enviar por WhatsApp</button>
-            <p class="form-note" style="text-align:center;font-size:1rem">Para contrataciones, escríbenos al <strong style="color:#25D366">0971 820 528 <i class="fab fa-whatsapp"></i></strong></p>
+            <p class="form-note" style="text-align:center;font-size:1rem">Para contrataciones, escríbenos al <strong style="color:#25D366"><span id="formPhone">0971 820 528</span> <i class="fab fa-whatsapp"></i></strong></p>
         </form>
     </div>
 </section>
