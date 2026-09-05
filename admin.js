@@ -54,6 +54,9 @@
     function ghHeaders() { return { 'Authorization': 'token ' + ghToken(), 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' }; }
     function ghRaw(path) { return 'https://raw.githubusercontent.com/' + window.GITHUB_OWNER + '/' + window.GITHUB_REPO + '/main/' + path; }
     function ghB64(str) { try { return btoa(unescape(encodeURIComponent(str))); } catch (e) { return ''; } }
+    function b64ToStr(b64) {
+        try { return decodeURIComponent(escape(atob(String(b64)))); } catch (e) { return ''; }
+    }
     function ghEncodePath(p) { return String(p).split('/').map(function (s) { return encodeURIComponent(s); }).join('/'); }
     function ghFileToB64(fileOrBlob) {
         return new Promise(function (resolve, reject) {
@@ -145,18 +148,23 @@
         // se pisa con la ultima edicion local de este navegador (sin borrar
         // contenido con listas vacias).
         if (!firebaseReady && ghEnabled()) {
-            // Lectura en orden: 1) GitHub raw (actualizado en SEGUNDOS)
-            // -> 2) data.json local/Pages (respaldo lento).
-            const gd = 'https://github.com/' + window.GITHUB_OWNER + '/' + window.GITHUB_REPO + '/raw/main/data.json?v=' + Date.now();
-            for (const url of [gd, 'data.json?v=' + Date.now()]) {
+            // Lectura SIEMPRE actual: 1) API de GitHub (sin caché, en vivo)
+            // -> 2) raw GitHub -> 3) data.json local (respaldo).
+            const api = ghBase() + '/contents/data.json';
+            const raw = 'https://github.com/' + window.GITHUB_OWNER + '/' + window.GITHUB_REPO + '/raw/main/data.json?v=' + Date.now();
+            for (const url of [api, raw, 'data.json?v=' + Date.now()]) {
                 try {
                     const r = await fetch(url, { cache: 'no-store' });
-                    if (!r.ok) continue;
+                    if (!r.ok || r.status === 403) continue;
                     const d = await r.json();
-                    const cloud = (d && d.site) ? d.site : {};
+                    let src = d;
+                    if (d.content && d.encoding === 'base64') {
+                        try { src = JSON.parse(b64ToStr(d.content)); } catch (e) { continue; }
+                    }
+                    const cloud = (src && src.site) ? src.site : {};
                     state.site = mergeSite(state.site, cloud, false);
-                    if (d && Array.isArray(d.photos)) {
-                        state.photos = d.photos.map(p => Object.assign({}, p, { id: p.id || p.url }));
+                    if (src && Array.isArray(src.photos)) {
+                        state.photos = src.photos.map(p => Object.assign({}, p, { id: p.id || p.url }));
                     }
                     break;
                 } catch (e) { }
@@ -186,7 +194,7 @@
             }
             if (ghEnabled()) {
                 ghTimeout(ghPublish(), 25000)
-                    .then(function () { resolve('Guardado y publicado. Todos los visitantes lo verán en 1–2 minutos.'); })
+                    .then(function () { resolve('Guardado y publicado. Ya se actualiza para todos: recargá la página (Ctrl+F5).'); })
                     .catch(function (e) { console.error('Error publicando en GitHub:', e); resolve('Guardado en este navegador. No se pudo publicar: ' + e.message + '. Revisa la conexión y vuelve a guardar.'); });
                 return;
             }

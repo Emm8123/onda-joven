@@ -113,28 +113,36 @@
         if (Array.isArray(over.stats) && (!protectEmpty || over.stats.length > 0)) out.stats = over.stats.slice();
         return out;
     }
+    // Decodifica base64 (con acentos) a texto.
+    function b64ToStr(b64) {
+        try { return decodeURIComponent(escape(atob(String(b64)))); } catch (e) { return ''; }
+    }
     async function loadData() {
         // Con Firebase SIN configurar, la pagina muestra lo PUBLICADO en
         // data.json (autoritativo). Si no existe aun, usa los defaults
         // completos. El respaldo local ya NO se autoaplica: un respaldo
         // viejo/podado no puede volver a borrar el contenido.
         if (!firebaseReady) {
-            // Lectura en orden: 1) GitHub raw (actualizado en SEGUNDOS tras el
-            // guardado) -> 2) data.json local/Pages (respaldo lento).
-            const gd = (window.GITHUB_OWNER && window.GITHUB_REPO)
-                ? 'https://github.com/' + window.GITHUB_OWNER + '/' + window.GITHUB_REPO + '/raw/main/data.json?v=' + Date.now()
-                : null;
-            const candidates = [gd, 'data.json?v=' + Date.now()].filter(Boolean);
+            // Lectura SIEMPRE actual: 1) API de GitHub (sin caché, en vivo) ->
+            // 2) raw GitHub (rápido, con caché corta) -> 3) local (respaldo).
+            const gh = (window.GITHUB_OWNER && window.GITHUB_REPO) ? window.GITHUB_OWNER + '/' + window.GITHUB_REPO : null;
+            const api = gh ? 'https://api.github.com/repos/' + gh + '/contents/data.json' : null;
+            const raw = gh ? 'https://github.com/' + gh + '/raw/main/data.json?v=' + Date.now() : null;
+            const candidates = [api, raw, 'data.json?v=' + Date.now()].filter(Boolean);
             let ok = false;
             for (const url of candidates) {
                 try {
                     const r = await fetch(url, { cache: 'no-store' });
-                    if (!r.ok) continue;
+                    if (!r.ok || r.status === 403) continue;
                     const d = await r.json();
-                    const c = (d && d.site) ? d.site : (d || {});
+                    let src = d;
+                    if (d.content && d.encoding === 'base64') {
+                        try { src = JSON.parse(b64ToStr(d.content)); } catch (e) { continue; }
+                    }
+                    const c = (src && src.site) ? src.site : (src || {});
                     state.site = mergeSite(state.site, c, false);
-                    if (d && Array.isArray(d.photos)) {
-                        state.photos = d.photos.map(p => Object.assign({}, p, { id: p.id || p.url }));
+                    if (src && Array.isArray(src.photos)) {
+                        state.photos = src.photos.map(p => Object.assign({}, p, { id: p.id || p.url }));
                     }
                     ok = true;
                     break;
