@@ -368,9 +368,9 @@
     </div>
     <div class="contact-grid">
         <div class="contact-info reveal">
-            <a class="contact-item" id="locCard" href="#" target="_blank" rel="noopener" title="Abrir en Google Maps">
+            <a class="contact-item" id="locCard" href="https://www.google.com/maps/dir/?api=1&destination=-24.4633671,-55.6907254" target="_blank" rel="noopener" title="Abrir la ruta en Google Maps">
                 <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
-                <div><h4>Ubicación</h4><p id="contactLocation">Paraguay</p><span class="contact-wa-badge" style="background:rgba(201,162,39,.15);color:var(--accent)"><i class="fas fa-directions"></i> Cómo llegar</span></div>
+                <div><h4>Ubicación</h4><p id="contactLocation">Curuguaty, Paraguay</p><span class="contact-wa-badge" style="background:rgba(201,162,39,.15);color:var(--accent)"><i class="fas fa-directions"></i> Cómo llegar</span></div>
             </a>
             <a class="contact-item whatsapp" id="waCard" href="https://wa.me/595971820528?text=Hola%2C%20quiero%20hacer%20una%20consulta%20para%20contratar%20al%20grupo%20musical" target="_blank" rel="noopener" title="Abrir chat de WhatsApp">
                 <div class="contact-icon wa"><i class="fab fa-whatsapp"></i></div>
@@ -443,8 +443,8 @@
 </a>
 
 <!-- FIREBASE: se carga SOLO si la configuracion esta completa (pagina rapida mientras no) -->
-<script src="firebase-config.js"></script>
-<script src="defaults.js"></script>
+<script src="firebase-config.js?v=3"></script>
+<script src="defaults.js?v=3"></script>
 <script>
     if (window.FIREBASE_CONFIGURED) {
         document.write('<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"><\/script>');
@@ -454,6 +454,6 @@
     }
 </script>
 
-<script src="app.js"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>
