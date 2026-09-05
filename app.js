@@ -328,6 +328,13 @@
 
     function renderContact() {
         const s = state.site;
+        // Tarjeta de ubicacion: abre Google Maps con la localidad del grupo
+        const lc = $('locCard');
+        if (lc) {
+            const q = s.map_query || s.location || '';
+            lc.setAttribute('href', q ? ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q)) : '#');
+            lc.setAttribute('title', 'Abrir en Google Maps');
+        }
         const cl = $('contactLocation'); if (cl && s.location) cl.textContent = s.location;
 
         // Tarjeta de WhatsApp: en general clicable con el numero y chat directo
