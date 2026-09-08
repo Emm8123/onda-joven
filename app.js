@@ -383,15 +383,20 @@
 
         const social = s.social || {};
         const links = [
-            { key: 'facebook', icon: 'fab fa-facebook-f', t: 'Facebook' },
-            { key: 'instagram', icon: 'fab fa-instagram', t: 'Instagram' },
-            { key: 'youtube', icon: 'fab fa-youtube', t: 'YouTube' },
-            { key: 'spotify', icon: 'fab fa-spotify', t: 'Spotify' },
-            { key: 'tiktok', icon: 'fab fa-tiktok', t: 'TikTok' }
+            { key: 'facebook', icon: 'fab fa-facebook-f', t: 'Facebook', cls: 'fb', msg: 'Seguinos en Facebook' },
+            { key: 'instagram', icon: 'fab fa-instagram', t: 'Instagram', cls: 'ig', msg: 'Seguinos en Instagram' },
+            { key: 'youtube', icon: 'fab fa-youtube', t: 'YouTube', cls: 'yt', msg: 'Mirá nuestros videos' },
+            { key: 'spotify', icon: 'fab fa-spotify', t: 'Spotify', cls: 'sp', msg: 'Escuchá nuestra música' },
+            { key: 'tiktok', icon: 'fab fa-tiktok', t: 'TikTok', cls: 'tk', msg: 'Seguinos en TikTok' }
         ];
         const box = $('socialLinks');
         if (!box) return;
-        const html = links.filter(l => social[l.key]).map(l => '<a href="' + esc(social[l.key]) + '" target="_blank" rel="noopener" class="social-link" title="' + l.t + '"><i class="' + l.icon + '"></i></a>').join('');
+        const html = links.filter(l => social[l.key] && /^https?:\/\//i.test(social[l.key])).map(l =>
+            '<a class="contact-item" href="' + esc(social[l.key]) + '" target="_blank" rel="noopener" title="' + l.t + '">' +
+                '<div class="contact-icon ' + l.cls + '"><i class="' + l.icon + '"></i></div>' +
+                '<div><h4>' + l.t + '</h4><p style="color:var(--text)">' + l.msg + '</p><span class="contact-wa-badge" style="background:rgba(201,162,39,.15);color:var(--accent)">Seguir</span></div>' +
+            '</a>'
+        ).join('');
         box.innerHTML = html || '<span style="color:var(--text-dim);font-size:.9rem">Redes aún no configuradas.</span>';
     }
 
