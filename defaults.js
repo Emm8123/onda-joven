@@ -34,7 +34,8 @@ window.OJ_DEFAULTS = {
             { name: 'Fiestas Privadas', desc: 'Cumpleaños y reuniones familiares con música en vivo.', icon: 'fa-glass-cheers' },
             { name: 'Festivales', desc: 'Espectáculo completo para escenarios y festivales.', icon: 'fa-star' },
             { name: 'Fiestas de Colación', desc: 'Cierra con broche de oro tu colación y graduación.', icon: 'fa-graduation-cap' },
-            { name: 'Eventos Empresariales', desc: 'Amenización profesional para tu empresa.', icon: 'fa-briefcase' }
+            { name: 'Eventos Empresariales', desc: 'Amenización profesional para tu empresa.', icon: 'fa-briefcase' },
+            { name: 'Encuentros Familiares', desc: 'Reuniones y encuentros de familia con música en vivo.', icon: 'fa-users' }
         ],
         repertoire: {
             paraguayas: [
@@ -116,6 +117,10 @@ window.OJ_DEFAULTS = {
         { url: 'fotos/Fiesta de colaci%C3%B3n.jpeg', thumb: 'fotos/thumbs/Fiesta de colaci%C3%B3n.jpeg', title: 'Fiesta de Colación', category: 'eventos' },
         { url: 'fotos/Fiestas%20patronales.jpeg', thumb: 'fotos/thumbs/Fiestas%20patronales.jpeg', title: 'Fiestas Patronales', category: 'eventos' },
         { url: 'fotos/Fiestas%20privadas.jpeg', thumb: 'fotos/thumbs/Fiestas%20privadas.jpeg', title: 'Fiestas Privadas', category: 'eventos' },
-        { url: 'fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg', thumb: 'fotos/thumbs/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg', title: 'Fiestas Privadas y Cumpleaños', category: 'eventos' }
+        { url: 'fotos/Encuentros%20familiares.jpeg', thumb: 'fotos/thumbs/Encuentros%20familiares.jpeg', title: 'Encuentros Familiares', category: 'eventos' },
+        { url: 'fotos/Festivales%202.jpeg', thumb: 'fotos/thumbs/Festivales%202.jpeg', title: 'Festivales', category: 'eventos' },
+        { url: 'fotos/Festival.jpeg', thumb: 'fotos/thumbs/Festival.jpeg', title: 'Festival', category: 'eventos' },
+        { url: 'fotos/Casamientos%202.jpeg', thumb: 'fotos/thumbs/Casamientos%202.jpeg', title: 'Casamientos', category: 'eventos' },
+        { url: 'fotos/Fiesta%20de%20colaci%C3%B3n%202.jpeg', thumb: 'fotos/thumbs/Fiesta%20de%20colaci%C3%B3n%202.jpeg', title: 'Fiesta de Colación', category: 'eventos' }
     ]
 };
