@@ -129,7 +129,7 @@
         out.social = Object.assign({}, base.social || {}, over.social || {});
         if (over.repertoire && typeof over.repertoire === 'object') {
             // Se usan SIEMPRE las categorias fijas del base (defaults).
-            // Cualquier clave rara/rota (ej. 'brasileÃ±as') se ignora.
+            // Cualquier clave rara/rota (ej. 'brasileñas') se ignora.
             const cats = {};
             Object.keys(base.repertoire || {}).forEach(function (c) {
                 const arr = (over.repertoire && Array.isArray(over.repertoire[c])) ? over.repertoire[c] : null;
