@@ -363,13 +363,6 @@
     },
     "photos": [
         {
-            "url": "fotos/Integrantes.jpeg",
-            "thumb": "fotos/thumbs/Integrantes.jpeg",
-            "title": "Integrantes de Onda Joven",
-            "category": "integradores",
-            "id": "fotos/Integrantes.jpeg"
-        },
-        {
             "url": "fotos/Casamientos.jpeg",
             "thumb": "fotos/thumbs/Casamientos.jpeg",
             "title": "Casamientos",
