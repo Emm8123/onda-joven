@@ -33,7 +33,7 @@
                                       "icon":  "fa-heart"
                                   },
                                   {
-                                      "name":  "Quinceañeras",
+                                      "name":  "Quince Años",
                                       "desc":  "Ambienta el día más especial de tus 15 años.",
                                       "icon":  "fa-crown"
                                   },
@@ -413,5 +413,5 @@
                        "id":  "fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg"
                    }
                ],
-    "saved_at":  "2026-09-08T02:39:26Z"
+    "saved_at": "2026-09-08T02:52:47Z"
 }
