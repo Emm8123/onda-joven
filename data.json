@@ -339,7 +339,29 @@
                                    "label":  "Integrantes",
                                    "value":  "4"
                                }
-                           ]
+                           ],
+                 "integrantes":  [
+                                     {
+                                         "foto":  "integrantes/bateria-primera-voz.jpeg",
+                                         "nombre":  "Virino Noguera",
+                                         "rol":  "Batería y Primera Voz"
+                                     },
+                                     {
+                                         "foto":  "integrantes/guitarrista-segunda-voz.jpeg",
+                                         "nombre":  "Carlino Noguera",
+                                         "rol":  "Guitarrista y Segunda Voz"
+                                     },
+                                     {
+                                         "foto":  "integrantes/teclado-tercera-voz.jpeg",
+                                         "nombre":  "Alfirio Noguera",
+                                         "rol":  "Teclado y Tercera Voz"
+                                     },
+                                     {
+                                         "foto":  "integrantes/bajista.jpeg",
+                                         "nombre":  "Cristian Armin Noguera",
+                                         "rol":  "Bajista"
+                                     }
+                                 ]
              },
     "photos":  [
                    {
@@ -413,27 +435,5 @@
                        "id":  "fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg"
                    }
                ],
-        "integrantes": [
-    {
-        "foto":  "integrantes/bateria-primera-voz.jpeg",
-        "nombre":  "Virino Noguera",
-        "rol":  "Batería y Primera Voz"
-    },
-    {
-        "foto":  "integrantes/guitarrista-segunda-voz.jpeg",
-        "nombre":  "Carlino Noguera",
-        "rol":  "Guitarrista y Segunda Voz"
-    },
-    {
-        "foto":  "integrantes/teclado-tercera-voz.jpeg",
-        "nombre":  "Alfirio Noguera",
-        "rol":  "Teclado y Tercera Voz"
-    },
-    {
-        "foto":  "integrantes/bajista.jpeg",
-        "nombre":  "Cristian Armin Noguera",
-        "rol":  "Bajista"
-    }
-],
-    "saved_at": "2026-09-08T02:52:47Z"
+    "saved_at":  "2026-09-08T02:52:47Z"
 }
