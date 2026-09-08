@@ -22,7 +22,7 @@ window.OJ_DEFAULTS = {
         services: [
             { name: 'Casamientos', desc: 'La música perfecta para tu boda y recepción.', icon: 'fa-ring' },
             { name: 'Bodas de Oro', desc: 'Celebración inolvidable para aniversarios.', icon: 'fa-heart' },
-            { name: 'Quinceañeras', desc: 'Ambienta el día más especial de tus 15 años.', icon: 'fa-crown' },
+            { name: 'Quince Años', desc: 'Ambienta el día más especial de tus 15 años.', icon: 'fa-crown' },
             { name: 'Fiestas Patronales', desc: 'Vivamos juntos las fiestas de tu comunidad.', icon: 'fa-church' },
             { name: 'Fiestas Privadas', desc: 'Cumpleaños y reuniones familiares con música en vivo.', icon: 'fa-glass-cheers' },
             { name: 'Festivales', desc: 'Espectáculo completo para escenarios y festivales.', icon: 'fa-star' },
