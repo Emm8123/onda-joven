@@ -380,6 +380,19 @@
         const c = cleanCoords(q);
         return c ? ('https://www.google.com/maps/dir/?api=1&destination=' + c) : '#';
     }
+    // Iframe del mapa: OpenStreetMap si hay coordenadas (carga bien en el
+    // movil, no falla en los celulares como el embed de Google), Google Maps
+    // como respaldo si la ubicacion es un texto simple.
+    function mapEmbedUrl(q) {
+        const c = cleanCoords(q);
+        const parts = c.split(',').map(Number);
+        if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+            const d = 0.02;
+            const bbox = (parts[1] - d) + ',' + (parts[0] - d) + ',' + (parts[1] + d) + ',' + (parts[0] + d);
+            return 'https://www.openstreetmap.org/export/embed.html?bbox=' + encodeURIComponent(bbox) + '&layer=mapnik&marker=' + encodeURIComponent(parts[0] + ',' + parts[1]);
+        }
+        return 'https://maps.google.com/maps?q=' + encodeURIComponent(c) + '&output=embed';
+    }
 
     function renderContact() {
         const s = state.site;
@@ -438,7 +451,7 @@
         if (!query) { frame.style.display = 'none'; placeholder.style.display = 'block'; bar.style.display = 'none'; return; }
         frame.style.display = 'block'; placeholder.style.display = 'none'; bar.style.display = 'flex';
         const at = $('mapAddressText'); if (at) at.textContent = state.site.location || query;
-        $('mapIframe').src = 'https://maps.google.com/maps?q=' + encodeURIComponent(cleanCoords(query)) + '&z=15&output=embed';
+        $('mapIframe').src = mapEmbedUrl(query);
         const dir = $('mapDirections');
         if (dir) dir.href = mapDirUrl(query);
     }
