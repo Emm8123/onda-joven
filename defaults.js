@@ -15,7 +15,7 @@ window.OJ_DEFAULTS = {
         whatsapp: '0971 820 528',
         email: '',
         videos: [],
-        about_image: 'fotos/Fiestas%20patronales.jpeg',
+        about_image: 'fotos/historia.jpeg',
         integrantes: [
             { nombre: 'Virino Noguera', rol: 'Batería y Primera Voz', foto: 'integrantes/bateria-primera-voz.jpeg' },
             { nombre: 'Carlino Noguera', rol: 'Guitarrista y Segunda Voz', foto: 'integrantes/guitarrista-segunda-voz.jpeg' },
