@@ -59,6 +59,11 @@
                 "name": "Eventos Empresariales",
                 "desc": "Amenización profesional para tu empresa.",
                 "icon": "fa-briefcase"
+            },
+            {
+                "name": "Encuentros Familiares",
+                "desc": "Reuniones y encuentros de familia con música en vivo.",
+                "icon": "fa-users"
             }
         ],
         "repertoire": {
@@ -411,6 +416,36 @@
             "title": "Fiestas Privadas y Cumpleaños",
             "category": "eventos",
             "id": "fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg"
+        },
+        {
+            "url": "fotos/Casamientos%202.jpeg",
+            "thumb": "fotos/thumbs/Casamientos%202.jpeg",
+            "title": "Casamientos",
+            "category": "eventos"
+        },
+        {
+            "url": "fotos/Festival.jpeg",
+            "thumb": "fotos/thumbs/Festival.jpeg",
+            "title": "Festival",
+            "category": "eventos"
+        },
+        {
+            "url": "fotos/Festivales%202.jpeg",
+            "thumb": "fotos/thumbs/Festivales%202.jpeg",
+            "title": "Festivales",
+            "category": "eventos"
+        },
+        {
+            "url": "fotos/Fiesta%20de%20colaci%C3%B3n%202.jpeg",
+            "thumb": "fotos/thumbs/Fiesta%20de%20colaci%C3%B3n%202.jpeg",
+            "title": "Fiesta de Colación",
+            "category": "eventos"
+        },
+        {
+            "url": "fotos/Encuentros%20familiares.jpeg",
+            "thumb": "fotos/thumbs/Encuentros%20familiares.jpeg",
+            "title": "Encuentros Familiares",
+            "category": "eventos"
         }
     ],
     "saved_at": "2026-09-08T02:52:47Z"
