@@ -219,9 +219,9 @@
         if (aboutImg) {
             if (img) {
                 aboutImg.src = img.url;
-                aboutImg.onerror = () => { aboutImg.src = 'logo.jpeg'; };
+                aboutImg.onerror = () => { aboutImg.src = 'logo.jpeg?v=2'; };
             } else {
-                aboutImg.src = 'logo.jpeg';
+                aboutImg.src = 'logo.jpeg?v=2';
             }
         }
     }
