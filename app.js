@@ -421,7 +421,16 @@
 
     function sendContact(e) {
         e.preventDefault();
-        window.open(waLink() + '?text=' + encodeURIComponent(waMessage()), '_blank');
+        const get = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+        const name = get('fName'), evt = get('fEvent'), date = get('fDate'), contract = get('fContract'), msg = get('fMsg');
+        let text = 'Hola, quiero contratar a Onda Joven.';
+        if (name) text += '\n*Nombre:* ' + name;
+        if (evt) text += '\n*Tipo de evento:* ' + evt;
+        if (date) text += '\n*Fecha:* ' + date;
+        if (contract) text += '\n*Contrato:* ' + contract;
+        if (msg) text += '\n*Mensaje:* ' + msg;
+        if (name) text += '\n\nSaludos, ' + name;
+        window.open(waLink() + '?text=' + encodeURIComponent(text), '_blank');
         e.target.reset();
     }
     window.OJ.sendContact = sendContact;

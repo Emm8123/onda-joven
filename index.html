@@ -405,19 +405,13 @@
             <div class="social-links" id="socialLinks"></div>
         </div>
         <form class="contact-form reveal" onsubmit="OJ.sendContact(event)">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nombre</label>
-                    <input type="text" placeholder="Tu nombre" required>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" placeholder="tu@email.com" required>
-                </div>
+            <div class="form-group">
+                <label for="fName">Nombre</label>
+                <input type="text" id="fName" placeholder="Tu nombre" required>
             </div>
             <div class="form-group">
-                <label>Tipo de Evento</label>
-                <select required>
+                <label for="fEvent">Tipo de Evento</label>
+                <select id="fEvent" required>
                     <option value="">Selecciona una opción</option>
                     <option>Casamiento / Boda</option>
                     <option>Quinceañera / 15 Años</option>
@@ -429,12 +423,12 @@
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label>Fecha del Evento</label>
-                    <input type="date" required>
+                    <label for="fDate">Fecha del Evento</label>
+                    <input type="date" id="fDate" required>
                 </div>
                 <div class="form-group">
-                    <label>Tipo de Contrato</label>
-                    <select>
+                    <label for="fContract">Tipo de Contrato</label>
+                    <select id="fContract">
                         <option value="">Selecciona</option>
                         <option>Contrato con Boleta Legal</option>
                         <option>Solo Música</option>
@@ -444,8 +438,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>Mensaje</label>
-                <textarea placeholder="Cuéntanos sobre tu evento..."></textarea>
+                <label for="fMsg">Mensaje</label>
+                <textarea id="fMsg" placeholder="Cuéntanos sobre tu evento..."></textarea>
             </div>
             <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center"><i class="fab fa-whatsapp"></i> Enviar por WhatsApp</button>
             <p class="form-note" style="text-align:center;font-size:1rem">Para contrataciones, escríbenos al <strong style="color:#25D366"><span id="formPhone">0971 820 528</span> <i class="fab fa-whatsapp"></i></strong></p>

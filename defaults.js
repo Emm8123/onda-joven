@@ -15,7 +15,10 @@ window.OJ_DEFAULTS = {
         whatsapp: '0971 820 528',
         email: '',
         videos: [],
-        social: {},
+        social: {
+            instagram: 'https://www.instagram.com/grupomusicalondajoven',
+            tiktok: 'https://www.tiktok.com/@ondajovenmusic'
+        },
         services: [
             { name: 'Casamientos', desc: 'La música perfecta para tu boda y recepción.', icon: 'fa-ring' },
             { name: 'Bodas de Oro', desc: 'Celebración inolvidable para aniversarios.', icon: 'fa-heart' },
