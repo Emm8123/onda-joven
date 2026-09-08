@@ -110,8 +110,6 @@ window.OJ_DEFAULTS = {
     },
     photos: [
         { url: 'fotos/Integrantes.jpeg', thumb: 'fotos/thumbs/Integrantes.jpeg', title: 'Integrantes de Onda Joven', category: 'integradores' },
-        { url: 'fotos/Integrantes...jpeg', thumb: 'fotos/thumbs/Integrantes...jpeg', title: 'Integrantes', category: 'integradores' },
-        { url: 'fotos/Integrantes....jpeg', thumb: 'fotos/thumbs/Integrantes....jpeg', title: 'Integrantes', category: 'integradores' },
         { url: 'fotos/Casamientos.jpeg', thumb: 'fotos/thumbs/Casamientos.jpeg', title: 'Casamientos', category: 'eventos' },
         { url: 'fotos/Festivales.jpeg', thumb: 'fotos/thumbs/Festivales.jpeg', title: 'Festivales', category: 'eventos' },
         { url: 'fotos/Fiesta de colaci%C3%B3n.jpeg', thumb: 'fotos/thumbs/Fiesta de colaci%C3%B3n.jpeg', title: 'Fiesta de Colación', category: 'eventos' },
