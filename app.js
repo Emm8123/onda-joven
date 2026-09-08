@@ -371,13 +371,23 @@
         observeReveal();
     }
 
+    // Coordenadas/texto limpio para Google Maps (compatibles con el movil:
+    // "lat, lng" -> "lat,lng" sin espacios raros que rompan el link).
+    function cleanCoords(q) {
+        return String(q || '').trim().split(',').map(function (s) { return s.trim(); }).filter(Boolean).join(',');
+    }
+    function mapDirUrl(q) {
+        const c = cleanCoords(q);
+        return c ? ('https://www.google.com/maps/dir/?api=1&destination=' + c) : '#';
+    }
+
     function renderContact() {
         const s = state.site;
         // Tarjeta de ubicacion: abre la ruta en Google Maps hacia la ubicacion exacta
         const lc = $('locCard');
         if (lc) {
             const q = s.map_query || s.location || '';
-            lc.setAttribute('href', q ? ('https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(q)) : '#');
+            lc.setAttribute('href', mapDirUrl(q));
             lc.setAttribute('title', 'Abrir la ruta en Google Maps');
         }
         const cl = $('contactLocation'); if (cl && s.location) cl.textContent = s.location;
@@ -428,9 +438,9 @@
         if (!query) { frame.style.display = 'none'; placeholder.style.display = 'block'; bar.style.display = 'none'; return; }
         frame.style.display = 'block'; placeholder.style.display = 'none'; bar.style.display = 'flex';
         const at = $('mapAddressText'); if (at) at.textContent = state.site.location || query;
-        $('mapIframe').src = 'https://www.google.com/maps?q=' + encodeURIComponent(query) + '&output=embed';
+        $('mapIframe').src = 'https://maps.google.com/maps?q=' + encodeURIComponent(cleanCoords(query)) + '&z=15&output=embed';
         const dir = $('mapDirections');
-        if (dir) dir.href = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(query);
+        if (dir) dir.href = mapDirUrl(query);
     }
 
     function observeReveal() {
