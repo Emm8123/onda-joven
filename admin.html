@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Onda Joven - Panel de Administración</title>
+    <title>Onda Joven - Panel de AdministraciÃ³n</title>
     <link rel="icon" href="logo.jpeg">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -71,10 +71,10 @@
 <div class="login-overlay" id="loginOverlay">
     <div class="login-box">
         <h1>Panel de Admin</h1>
-        <p>Ingresa tu contraseña para acceder</p>
-        <input type="password" id="adminPasswordInput" placeholder="Contraseña" autocomplete="current-password" aria-describedby="loginError" onkeydown="if(event.key==='Enter')OJAdmin.doLogin()">
+        <p>Ingresa tu contraseÃ±a para acceder</p>
+        <input type="password" id="adminPasswordInput" placeholder="ContraseÃ±a" autocomplete="current-password" aria-describedby="loginError" onkeydown="if(event.key==='Enter')OJAdmin.doLogin()">
         <input type="password" id="ghTokenInput" placeholder="Token de GitHub (para publicar)" autocomplete="off" style="margin-top:-8px">
-        <p style="color:var(--text-dim);font-size:.78rem;margin:-8px 0 14px;text-align:left">Si querés que los cambios se publiquen para todos, pegá aquí tu token de GitHub (solo se guarda en este navegador).</p>
+        <p style="color:var(--text-dim);font-size:.78rem;margin:-8px 0 14px;text-align:left">Si querÃ©s que los cambios se publiquen para todos, pegÃ¡ aquÃ­ tu token de GitHub (solo se guarda en este navegador).</p>
         <div class="login-error" id="loginError" role="alert"></div>
         <button class="btn-login" onclick="OJAdmin.doLogin()">Entrar</button>
     </div>
@@ -86,15 +86,15 @@
 <div class="panel" id="adminPanel">
     <div class="panel-header">
         <h1>Panel de Admin</h1>
-        <button class="btn-close" onclick="OJAdmin.logout()" aria-label="Cerrar sesión">Cerrar Sesión</button>
+        <button class="btn-close" onclick="OJAdmin.logout()" aria-label="Cerrar sesiÃ³n">Cerrar SesiÃ³n</button>
     </div>
 
     <div class="section">
-        <h2><i class="fas fa-info-circle"></i> Información Principal</h2>
+        <h2><i class="fas fa-info-circle"></i> InformaciÃ³n Principal</h2>
         <div class="form-group"><label for="aBandName">Nombre del Grupo Musical</label><input type="text" id="aBandName"></div>
         <div class="form-group"><label for="aHeroSubtitle">Frase del Hero</label><input type="text" id="aHeroSubtitle"></div>
-        <div class="form-group"><label for="aHeroDesc">Descripción del Hero</label><textarea id="aHeroDesc"></textarea></div>
-        <button class="btn-save" onclick="OJAdmin.saveBasic()">Guardar Información</button>
+        <div class="form-group"><label for="aHeroDesc">DescripciÃ³n del Hero</label><textarea id="aHeroDesc"></textarea></div>
+        <button class="btn-save" onclick="OJAdmin.saveBasic()">Guardar InformaciÃ³n</button>
     </div>
 
     <div class="section">
@@ -111,57 +111,67 @@
         <h2><i class="fas fa-images"></i> Fotos del Grupo Musical</h2>
         <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
             <i class="fas fa-cloud-upload-alt"></i>
-            <p>Haz clic o arrastra fotos aquí</p>
+            <p>Haz clic o arrastra fotos aquÃ­</p>
             <input type="file" id="fileInput" multiple accept="image/*" style="display:none" aria-label="Subir fotos" onchange="OJAdmin.handleUpload(event)">
         </div>
         <div class="uploading" id="uploading">Subiendo fotos...</div>
         <div class="form-row">
             <div class="form-group">
-                <label for="uploadCategory">Categoría</label>
+                <label for="uploadCategory">CategorÃ­a</label>
                 <select id="uploadCategory"><option value="general">General</option><option value="concierto">Conciertos</option><option value="integradores">Integrantes</option><option value="eventos">Eventos</option><option value="promo">Promocional</option></select>
             </div>
-            <div class="form-group"><label for="uploadTitle">Título</label><input type="text" id="uploadTitle" placeholder="Título de la foto"></div>
+            <div class="form-group"><label for="uploadTitle">TÃ­tulo</label><input type="text" id="uploadTitle" placeholder="TÃ­tulo de la foto"></div>
         </div>
         <div class="list" id="adminGalleryList" style="margin-top:8px"></div>
         <div class="status" id="photoStatus"></div>
     </div>
 
     <div class="section">
+        <h2><i class="fas fa-user-music"></i> Integrantes</h2>
+        <p style="color:var(--text-dim);font-size:.85rem;margin-bottom:12px">Nombre, rol y foto de cada mÃºsico. En "Foto" pegÃ¡ la ruta del archivo (ej. <span style="font-family:monospace">integrantes/bajista.jpeg</span>).</p>
+        <div class="form-group"><label for="intNombre">Nombre completo</label><input type="text" id="intNombre" placeholder="Ej: Carlino Noguera"></div>
+        <div class="form-group"><label for="intRol">Rol en la banda</label><input type="text" id="intRol" placeholder="Ej: Guitarrista y Segunda Voz"></div>
+        <div class="form-group"><label for="intFoto">Foto (ruta)</label><input type="text" id="intFoto" placeholder="integrantes/bajista.jpeg"></div>
+        <button class="btn-add" onclick="OJAdmin.addIntegrante()">+ Agregar Integrante</button>
+        <div class="list" id="adminIntList" style="margin-top:8px"></div>
+    </div>
+
+    <div class="section">
         <h2><i class="fab fa-youtube"></i> Videos (YouTube)</h2>
-        <p style="color:var(--text-dim);font-size:.85rem;margin-bottom:12px">Pegá el link de un video de YouTube (público o "no listado"). Se muestra en la página sin salir de ella.</p>
+        <p style="color:var(--text-dim);font-size:.85rem;margin-bottom:12px">PegÃ¡ el link de un video de YouTube (pÃºblico o "no listado"). Se muestra en la pÃ¡gina sin salir de ella.</p>
         <div class="form-group"><label for="videoUrl">Link de YouTube</label><input type="text" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..."></div>
-        <div class="form-group"><label for="videoTitle">Título</label><input type="text" id="videoTitle" placeholder="Ej: Onda Joven - Bailable 2026"></div>
+        <div class="form-group"><label for="videoTitle">TÃ­tulo</label><input type="text" id="videoTitle" placeholder="Ej: Onda Joven - Bailable 2026"></div>
         <button class="btn-add" onclick="OJAdmin.addVideo()">+ Agregar Video</button>
         <div class="list" id="adminVideoList" style="margin-top:8px"></div>
         <div class="status" id="videoStatus"></div>
     </div>
 
     <div class="section">
-        <h2><i class="fas fa-map-marked-alt"></i> Ubicación y Contacto</h2>
-        <div class="form-group"><label for="aLocation">Ubicación (texto)</label><input type="text" id="aLocation"></div>
-        <div class="form-group"><label for="aMapQuery">Ubicación en Google Maps</label><input type="text" id="aMapQuery" placeholder="Ej: Curuguaty, Paraguay"></div>
-        <div class="form-group"><label for="aPhone">Teléfono</label><input type="text" id="aPhone"></div>
+        <h2><i class="fas fa-map-marked-alt"></i> UbicaciÃ³n y Contacto</h2>
+        <div class="form-group"><label for="aLocation">UbicaciÃ³n (texto)</label><input type="text" id="aLocation"></div>
+        <div class="form-group"><label for="aMapQuery">UbicaciÃ³n en Google Maps</label><input type="text" id="aMapQuery" placeholder="Ej: Curuguaty, Paraguay"></div>
+        <div class="form-group"><label for="aPhone">TelÃ©fono</label><input type="text" id="aPhone"></div>
         <div class="form-group"><label for="aWhatsapp">WhatsApp</label><input type="text" id="aWhatsapp" placeholder="Ej: 0971 820 528"></div>
         <div class="form-group"><label for="aEmail">Email</label><input type="text" id="aEmail"></div>
-        <button class="btn-save" onclick="OJAdmin.saveContact()">Guardar Ubicación y Contacto</button>
+        <button class="btn-save" onclick="OJAdmin.saveContact()">Guardar UbicaciÃ³n y Contacto</button>
     </div>
 
     <div class="section">
         <h2><i class="fas fa-history"></i> Historia</h2>
-        <div class="form-group"><label for="aAbout">Texto Historia (Quiénes Somos)</label><textarea id="aAbout" style="min-height:120px"></textarea></div>
+        <div class="form-group"><label for="aAbout">Texto Historia (QuiÃ©nes Somos)</label><textarea id="aAbout" style="min-height:120px"></textarea></div>
         <button class="btn-save" onclick="OJAdmin.saveStory()">Guardar Historia</button>
     </div>
 
     <div class="section">
         <h2><i class="fas fa-music"></i> Repertorio</h2>
         <div class="form-group">
-            <label for="songCategory">Categoría</label>
-            <select id="songCategory"><option value="paraguayas">Polkas y Guaranías</option><option value="latinas">Cumbias y Salsa</option><option value="merengues">Merengues</option><option value="romanticas">Baladas</option><option value="boleros">Boleros</option><option value="mexicanas">Mexicanos y Corridos</option><option value="internacional">Rock y Pop</option><option value="brasileñas">Sertanejo y Música Brasileña</option></select>
+            <label for="songCategory">CategorÃ­a</label>
+            <select id="songCategory"><option value="paraguayas">Polkas y GuaranÃ­as</option><option value="latinas">Cumbias y Salsa</option><option value="merengues">Merengues</option><option value="romanticas">Baladas</option><option value="boleros">Boleros</option><option value="mexicanas">Mexicanos y Corridos</option><option value="internacional">Rock y Pop</option><option value="brasileÃ±as">Sertanejo y MÃºsica BrasileÃ±a</option></select>
         </div>
-        <div class="form-group"><label for="songName">Nombre de la Canción</label><input type="text" id="songName"></div>
+        <div class="form-group"><label for="songName">Nombre de la CanciÃ³n</label><input type="text" id="songName"></div>
         <div class="form-group"><label for="songArtist">Artista</label><input type="text" id="songArtist"></div>
-        <div class="form-group"><label for="songDuration">Duración</label><input type="text" id="songDuration" placeholder="3:45"></div>
-        <button class="btn-add" onclick="OJAdmin.addSong()">+ Agregar Canción</button>
+        <div class="form-group"><label for="songDuration">DuraciÃ³n</label><input type="text" id="songDuration" placeholder="3:45"></div>
+        <button class="btn-add" onclick="OJAdmin.addSong()">+ Agregar CanciÃ³n</button>
         <div class="list" id="adminSongList" style="margin-top:8px"></div>
         <div class="status" id="songStatus"></div>
     </div>
@@ -169,18 +179,18 @@
     <div class="section">
         <h2><i class="fas fa-star"></i> Servicios</h2>
         <div class="form-group"><label for="serviceName">Nombre del Servicio</label><input type="text" id="serviceName"></div>
-        <div class="form-group"><label for="serviceDesc">Descripción</label><input type="text" id="serviceDesc"></div>
+        <div class="form-group"><label for="serviceDesc">DescripciÃ³n</label><input type="text" id="serviceDesc"></div>
         <div class="form-group"><label for="serviceIcon">Icono</label><input type="text" id="serviceIcon" placeholder="fa-music"></div>
         <button class="btn-add" onclick="OJAdmin.addService()">+ Agregar Servicio</button>
         <div class="list" id="adminServiceList" style="margin-top:8px"></div>
         <div class="status" id="serviceStatus"></div>
     </div>
 
-    <button class="btn-logout" onclick="OJAdmin.logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+    <button class="btn-logout" onclick="OJAdmin.logout()"><i class="fas fa-sign-out-alt"></i> Cerrar SesiÃ³n</button>
 </div>
-<script src="firebase-config.js?v=3"></script>
+<script src="firebase-config.js?v=4"></script>
 
-<script src="defaults.js?v=3"></script>
+<script src="defaults.js?v=4"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script>
     if (window.FIREBASE_CONFIGURED) {
@@ -190,6 +200,6 @@
         document.write('<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"><\/script>');
     }
 </script>
-<script src="admin.js?v=3"></script>
+<script src="admin.js?v=4"></script>
 </body>
 </html>

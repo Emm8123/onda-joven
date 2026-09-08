@@ -112,6 +112,7 @@
         if (Array.isArray(over.services) && (!protectEmpty || over.services.length > 0)) out.services = over.services.slice();
         if (Array.isArray(over.stats) && (!protectEmpty || over.stats.length > 0)) out.stats = over.stats.slice();
         if (Array.isArray(over.videos)) out.videos = over.videos.slice();
+        if (Array.isArray(over.integrantes)) out.integrantes = over.integrantes.slice();
         return out;
     }
     // Extrae el ID de un link de YouTube (watch, youtu.be, embed, shorts, live)
@@ -190,6 +191,7 @@
     function renderAll() {
         safe(renderBrand);
         safe(renderAbout);
+        safe(renderIntegrantes);
         safe(renderVideos);
         safe(renderGallery);
         safe(renderRepertoire);
@@ -222,6 +224,21 @@
                 aboutImg.src = 'logo.jpeg';
             }
         }
+    }
+
+    function renderIntegrantes() {
+        const integ = state.site.integrantes || [];
+        const g = $('integrantesGrid');
+        if (!g) return;
+        if (!integ.length) { g.style.display = 'none'; return; }
+        g.style.display = 'grid';
+        g.innerHTML = integ.map(m =>
+            '<div class="integrante-card reveal">' +
+                (m.foto ? '<img class="integrante-photo" src="' + esc(m.foto) + '" alt="' + esc(m.nombre) + '" loading="lazy" decoding="async" onerror="this.style.visibility=\'hidden\';this.style.display=\'none\'">' : '') +
+                '<h3>' + esc(m.nombre) + '</h3><p>' + esc(m.rol) + '</p>' +
+            '</div>'
+        ).join('');
+        observeReveal();
     }
 
     function renderVideos() {

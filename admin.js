@@ -142,6 +142,7 @@
         if (Array.isArray(over.services) && (!protectEmpty || over.services.length > 0)) out.services = over.services.slice();
         if (Array.isArray(over.stats) && (!protectEmpty || over.stats.length > 0)) out.stats = over.stats.slice();
         if (Array.isArray(over.videos)) out.videos = over.videos.slice();
+        if (Array.isArray(over.integrantes)) out.integrantes = over.integrantes.slice();
         return out;
     }
     // Extrae el ID de un link de YouTube (watch, youtu.be, embed, shorts, live)
@@ -258,7 +259,7 @@
         const soc = s.social || {};
         const so = { aSocialFb: 'facebook', aSocialIg: 'instagram', aSocialYt: 'youtube', aSocialSp: 'spotify', aSocialTk: 'tiktok' };
         Object.keys(so).forEach(id => { const el = $(id); if (el) el.value = soc[so[id]] || ''; });
-        renderSongList(); renderServiceList(); renderGalleryList(); renderVideoList();
+        renderSongList(); renderServiceList(); renderGalleryList(); renderVideoList(); renderIntList();
     }
 
     // ===== FOTOS =====
@@ -380,6 +381,27 @@
         el.innerHTML = sv.map((s, i) => '<div class="list-item"><span>' + esc(s.name) + '</span><button class="btn-delete" onclick="OJAdmin.deleteService(' + i + ')">Eliminar</button></div>').join('') || '<p style="color:var(--text-dim);font-size:.85rem">No hay servicios</p>';
     }
 
+    // ===== INTEGRANTES =====
+    function addIntegrante() {
+        const nombre = $('intNombre').value.trim(); if (!nombre) { toast('Escribe el nombre del integrante'); return; }
+        state.site.integrantes = state.site.integrantes || [];
+        state.site.integrantes.push({
+            nombre,
+            rol: $('intRol').value.trim() || 'Integrante',
+            foto: $('intFoto').value.trim() || ''
+        });
+        saveConfig().then((msg) => {
+            ['intNombre', 'intRol', 'intFoto'].forEach(i => $(i).value = '');
+            renderIntList(); toast('Integrante agregado'); if (msg) toast(msg);
+        });
+    }
+    function deleteIntegrante(index) { state.site.integrantes.splice(index, 1); saveConfig().then((msg) => { renderIntList(); if (msg) toast(msg); }); }
+    function renderIntList() {
+        const el = $('adminIntList'); if (!el) return;
+        const integ = state.site.integrantes || [];
+        el.innerHTML = integ.map((m, i) => '<div class="list-item"><span><i class="fas fa-user-music"></i> ' + esc(m.nombre) + ' — ' + esc(m.rol) + '</span><button class="btn-delete" onclick="OJAdmin.deleteIntegrante(' + i + ')">Eliminar</button></div>').join('') || '<p style="color:var(--text-dim);font-size:.85rem">No hay integrantes</p>';
+    }
+
     // ===== VIDEOS =====
     function addVideo() {
         const url = $('videoUrl').value.trim(); if (!url) { toast('Pegá primero el link de YouTube'); return; }
@@ -433,7 +455,7 @@
     });
 
     // ===== API PUBLICA =====
-    window.OJAdmin = { doLogin, logout, saveBasic, saveStory, saveSocial, saveContact, handleUpload, handleFiles, deletePhoto, addSong, deleteSong, addService, deleteService, addVideo, deleteVideo, saveGhToken };
+    window.OJAdmin = { doLogin, logout, saveBasic, saveStory, saveSocial, saveContact, handleUpload, handleFiles, deletePhoto, addSong, deleteSong, addService, deleteService, addVideo, deleteVideo, addIntegrante, deleteIntegrante, saveGhToken };
 
     // ===== INICIO =====
     try { const el = $('ghTokenInput'); if (el && localStorage.getItem('onaGhToken')) el.value = localStorage.getItem('onaGhToken'); } catch (e) {}

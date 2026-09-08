@@ -15,6 +15,12 @@ window.OJ_DEFAULTS = {
         whatsapp: '0971 820 528',
         email: '',
         videos: [],
+        integrantes: [
+            { nombre: 'Virino Noguera', rol: 'Batería y Primera Voz', foto: 'integrantes/bateria-primera-voz.jpeg' },
+            { nombre: 'Carlino Noguera', rol: 'Guitarrista y Segunda Voz', foto: 'integrantes/guitarrista-segunda-voz.jpeg' },
+            { nombre: 'Alfirio Noguera', rol: 'Teclado y Tercera Voz', foto: 'integrantes/teclado-tercera-voz.jpeg' },
+            { nombre: 'Cristian Armin Noguera', rol: 'Bajista', foto: 'integrantes/bajista.jpeg' }
+        ],
         social: {
             instagram: 'https://www.instagram.com/grupomusicalondajoven',
             tiktok: 'https://www.tiktok.com/@ondajovenmusic'
