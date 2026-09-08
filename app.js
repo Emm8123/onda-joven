@@ -213,15 +213,17 @@
         const hs = $('heroSubtitle'); if (hs) hs.textContent = state.site.hero.subtitle || '';
         const hd = $('heroDesc'); if (hd) hd.textContent = state.site.hero.desc || '';
 
-        // Imagen de "historia": usa foto de integrantes si existe
-        const img = state.photos.find(p => p.category === 'integradores') || state.photos[0];
+        // Imagen de "historia": usa foto configurable o la de integrantes si existe
+        const img = (state.site.about_image && state.site.about_image.trim()) ?
+            { url: state.site.about_image } :
+            (state.photos.find(p => p.category === 'integradores') || state.photos[0]);
         const aboutImg = $('aboutImage');
         if (aboutImg) {
             if (img) {
                 aboutImg.src = img.url;
-                aboutImg.onerror = () => { aboutImg.src = 'logo.jpeg?v=2'; };
+                aboutImg.onerror = () => { aboutImg.src = 'logo.jpeg?v=3'; };
             } else {
-                aboutImg.src = 'logo.jpeg?v=2';
+                aboutImg.src = 'logo.jpeg?v=3';
             }
         }
     }
