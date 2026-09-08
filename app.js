@@ -386,7 +386,7 @@
         const wc = $('waCard');
         if (wc) {
             const wa = waLink();
-            wc.setAttribute('href', (s.phone && wa && wa !== '#') ? (wa + '?text=' + encodeURIComponent(waMessage())) : '#');
+            wc.setAttribute('href', (wa && wa !== '#') ? (wa + '?text=' + encodeURIComponent(waMessage())) : '#');
             wc.setAttribute('title', 'Abrir chat de WhatsApp');
         }
         const cp = $('contactPhone');
@@ -399,7 +399,7 @@
         const wf = $('waFloat');
         if (wf) {
             const wa = waLink();
-            wf.setAttribute('href', (s.phone && wa && wa !== '#') ? (wa + '?text=' + encodeURIComponent(waMessage())) : '#');
+            wf.setAttribute('href', (wa && wa !== '#') ? (wa + '?text=' + encodeURIComponent(waMessage())) : '#');
         }
 
         const social = s.social || {};

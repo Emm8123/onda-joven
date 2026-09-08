@@ -114,7 +114,6 @@ window.OJ_DEFAULTS = {
         { url: 'fotos/Casamientos.jpeg', thumb: 'fotos/thumbs/Casamientos.jpeg', title: 'Casamientos', category: 'eventos' },
         { url: 'fotos/Festivales.jpeg', thumb: 'fotos/thumbs/Festivales.jpeg', title: 'Festivales', category: 'eventos' },
         { url: 'fotos/Fiesta de colaci%C3%B3n.jpeg', thumb: 'fotos/thumbs/Fiesta de colaci%C3%B3n.jpeg', title: 'Fiesta de Colación', category: 'eventos' },
-        { url: 'fotos/Fiesta de colaci%C3%B3n..jpeg', thumb: 'fotos/thumbs/Fiesta de colaci%C3%B3n..jpeg', title: 'Fiesta de Colación', category: 'eventos' },
         { url: 'fotos/Fiestas%20patronales.jpeg', thumb: 'fotos/thumbs/Fiestas%20patronales.jpeg', title: 'Fiestas Patronales', category: 'eventos' },
         { url: 'fotos/Fiestas%20privadas.jpeg', thumb: 'fotos/thumbs/Fiestas%20privadas.jpeg', title: 'Fiestas Privadas', category: 'eventos' },
         { url: 'fotos/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg', thumb: 'fotos/thumbs/Fiestas%20privadas%20como%20cumplea%C3%B1os.jpeg', title: 'Fiestas Privadas y Cumpleaños', category: 'eventos' }

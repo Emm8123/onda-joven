@@ -57,7 +57,14 @@
     function b64ToStr(b64) {
         try { return decodeURIComponent(escape(atob(String(b64)))); } catch (e) { return ''; }
     }
-    function ghEncodePath(p) { return String(p).split('/').map(function (s) { return encodeURIComponent(s); }).join('/'); }
+    function ghEncodePath(p) {
+        // Los nombres guardados pueden venir ya URL-encoded (%20, %C3%B3).
+        // Se decodifica cada segmento y se vuelve a codificar: evita el doble
+        // encoding (%25) al borrar fotos con espacios o acentos.
+        return String(p).split('/').map(function (s) {
+            try { return encodeURIComponent(decodeURIComponent(s)); } catch (e) { return encodeURIComponent(s); }
+        }).join('/');
+    }
     function ghFileToB64(fileOrBlob) {
         return new Promise(function (resolve, reject) {
             const r = new FileReader();
