@@ -267,7 +267,9 @@
     }
 
     function renderGallery() {
-        const cats = ['all'].concat(Array.from(new Set(state.photos.map(p => p.category))));
+        // "Integrantes" solo se usa en la seccion Quienes Somos; no se muestra en la galeria
+        const galleryPhotos = state.photos.filter(p => p.category !== 'integradores');
+        const cats = ['all'].concat(Array.from(new Set(galleryPhotos.map(p => p.category))));
         const filterEl = $('galleryFilter');
         if (filterEl) {
             filterEl.innerHTML = cats.map(c =>
@@ -275,7 +277,7 @@
             ).join('');
         }
 
-        const items = state.currentFilter === 'all' ? state.photos : state.photos.filter(p => p.category === state.currentFilter);
+        const items = state.currentFilter === 'all' ? galleryPhotos : galleryPhotos.filter(p => p.category === state.currentFilter);
         state.filteredPhotos = items;
         const grid = $('galleryGrid');
         const empty = $('emptyGallery');
